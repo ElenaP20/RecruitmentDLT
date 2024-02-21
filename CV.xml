@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cv>
+    <personal_info>
+        <name> Name </name>
+        <email> email@example.com </email>
+        <phone> 123-123-123 </phone>
+    </personal_info>
+    <right_to_work> Yes </right_to_work>
+    <education>
+        <institution> High School </institution>
+        <graduation_year> 2016</graduation_year>
+        <institution> University Name </institution>
+        <degree> Bachelor of something </degree>
+        <graduation_year> 2020 </graduation_year>
+    </education>
+    <experience>
+        <company_name> Company Name </company_name>
+        <position> Position </position>
+        <dates> 2020-2022 </dates>
+        <description> List of responsibilities and achievements </description>
+        <company_name> Company Name </company_name>
+        <position> Position </position>
+        <dates> 2022-Present </dates>
+        <description> List of opportunities and achievements </description>
+    </experience>
+    <skills>
+        <skill> Python </skill>
+        <skill> Java </skill>
+        <skill> Blockchain </skill>
+    <skills>
+</cv>
