@@ -4,6 +4,13 @@ from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad
 import base64
 
+# References
+# - pycryptodome: https://pypi.org/project/pycryptodome/
+# - AES: https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
+# - CBC mode: https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_Block_Chaining_(CBC)
+# - RSA: https://en.wikipedia.org/wiki/RSA_(cryptosystem)
+# - OAEP padding: https://en.wikipedia.org/wiki/Optimal_Asymmetric_Encryption_Padding
+
 # Read the XML file content
 with open("CV.xml", "rb") as f:
     xml_data = f.read()
@@ -36,10 +43,16 @@ rsa_cipher = PKCS1_OAEP.new(rsa_public_key)
 # Encrypt the AES key with RSA
 encrypted_aes_key = rsa_cipher.encrypt(aes_key)
 
-# Write encrypted AES key, IV, and AES-encrypted data to a file
-with open("doubly_encrypted_cv.dat", "wb") as f:
-    f.write(encrypted_aes_key)
-    f.write(iv)
-    f.write(aes_encrypted_data)
+# Split the AES key into two halves
+half_aes_key_length = len(aes_key) // 2
+encrypted_aes_key_part1 = encrypted_aes_key[:half_aes_key_length]
+encrypted_aes_key_part2 = encrypted_aes_key[half_aes_key_length:]
 
-print("XML file encrypted using AES-256 in CBC mode and then doubly encrypted with RSA (using hybrid encryption) successfully!")
+# Prepare the packet: header (encrypted half of AES key) + body (IV + AES-encrypted data)
+packet = encrypted_aes_key_part1 + encrypted_aes_key_part2 + iv + aes_encrypted_data
+
+# Write the packet to a file
+with open("encrypted_cv_packet.dat", "wb") as f:
+    f.write(packet)
+
+print("Encrypted CV data exported as a packet successfully!")
