@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job>
+  <title> Job Title </title>
+  <company> Company Name </company>
+  <location> Job Location </location>
+  <type> Full-time/Part-time/Contract/Etc </type>  
+  <description>
+    Brief description of the role and company 
+  </description>
+  <responsibilities>
+    <item> Responsibility 1 </item>
+    <item> Responsibility 2 </item>
+    </responsibilities>
+  <requirements>
+    <item> Skill or experience 1 </item>
+    <item> Skill or experience 2 </item>
+    </requirements>  
+  <salary> Salary Range </salary> 
+  <contact_email> Contact Email </contact_email>
+  <applicationDetails> Application details  </applicationDetails>
+</job>
