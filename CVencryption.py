@@ -33,14 +33,17 @@ rsa_public_key = RSA.import_key(rsa_public_key_pem)
 # Create RSA cipher object
 rsa_cipher = PKCS1_OAEP.new(rsa_public_key)
 
-# Encrypt the AES key with RSA
-encrypted_aes_key = rsa_cipher.encrypt(aes_key)
+# Encrypt the CV data with AES
+cv_encrypted_with_aes = aes_encrypted_data
 
-# Prepare the packet: AES-encrypted data + IV + encrypted AES key
-packet = aes_encrypted_data + iv + encrypted_aes_key
+# Split the AES key into two halves
+half_aes_key_length = len(aes_key) // 2
+encrypted_aes_key_part1 = rsa_cipher.encrypt(aes_key[:half_aes_key_length])
+encrypted_aes_key_part2 = rsa_cipher.encrypt(aes_key[half_aes_key_length:])
 
-# Write the packet to a file
-with open("secure_cv_packet.dat", "wb") as f:
-    f.write(packet)
+# Write the packets to two separate files, each containing one half of the encrypted AES key in the header
+with open("packet1.dat", "wb") as f1, open("packet2.dat", "wb") as f2:
+    f1.write(encrypted_aes_key_part1 + cv_encrypted_with_aes)
+    f2.write(encrypted_aes_key_part2 + cv_encrypted_with_aes)
 
-print("Secure packet suitable for submission to NFT storage platform has been created successfully!")
+print("Two packets with encrypted headers and AES-encrypted CV content have been created successfully!")
