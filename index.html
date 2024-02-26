@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Posting</title>
+</head>
+<body>
+    <div id="job-posting"></div>
+
+    <script>
+        // the string variable contains XML data representing the job posting
+        const xmlData = `<?xml version="1.0" encoding="UTF-8"?>
+            <job>
+                <title>Job Title</title>
+                <company>Company Name</company>
+                <location>Job Location</location>
+                <type>Full-time/Part-time/Contract/Etc</type>  
+                <description>Brief description of the role and company</description>
+                <responsibilities>
+                    <item>Responsibility 1</item>
+                    <item>Responsibility 2</item>
+                </responsibilities>
+                <requirements>
+                    <item>Skill or experience 1</item>
+                    <item>Skill or experience 2</item>
+                </requirements>  
+                <salary>Salary Range</salary> 
+                <contact_email>Contact Email</contact_email>
+                <applicationDetails>Application details</applicationDetails>
+            </job>`;
+
+        // Parse the XML data using the DOMParser object
+        const parser = new DOMParser();
+        // Parses the xmlData and creates a DOM document object 
+        const xmlDoc = parser.parseFromString(xmlData, "text/xml");
+
+        // Dynamically generate HTML content from the parsed XML document
+        let htmlContent = `
+            <h1>${xmlDoc.querySelector('title').textContent}</h1>
+            <p><strong>Company:</strong> ${xmlDoc.querySelector('company').textContent}</p>
+            <p><strong>Location:</strong> ${xmlDoc.querySelector('location').textContent}</p>
+            <p><strong>Type:</strong> ${xmlDoc.querySelector('type').textContent}</p>
+            <p><strong>Description:</strong> ${xmlDoc.querySelector('description').textContent}</p>
+            <h2>Responsibilities:</h2>
+            <ul>
+                ${Array.from(xmlDoc.querySelectorAll('responsibilities item')).map(item => `<li>${item.textContent}</li>`).join('')}
+            </ul>
+            <h2>Requirements:</h2>
+            <ul>
+                ${Array.from(xmlDoc.querySelectorAll('requirements item')).map(item => `<li>${item.textContent}</li>`).join('')}
+            </ul>
+            <p><strong>Salary:</strong> ${xmlDoc.querySelector('salary').textContent}</p>
+            <p><strong>Contact Email:</strong> ${xmlDoc.querySelector('contact_email').textContent}</p>
+            <p><strong>Application Details:</strong> ${xmlDoc.querySelector('applicationDetails').textContent}</p>
+        `;
+
+        // Inject HTML content into the document at the div element with job-posting ID
+        document.getElementById('job-posting').innerHTML = htmlContent;
+    </script>
+</body>
+</html>
