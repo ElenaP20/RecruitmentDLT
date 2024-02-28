@@ -24,7 +24,7 @@ aes_encrypted_data = aes_cipher.encrypt(padded_data)
 iv = aes_cipher.iv
 
 # Read the recipient's RSA public key in PEM format
-with open('public_key.pem', 'rb') as f:
+with open('test.pem', 'rb') as f:
     rsa_public_key_pem = f.read()
 
 # Import the RSA public key from PEM format
@@ -41,9 +41,9 @@ half_aes_key_length = len(aes_key) // 2
 encrypted_aes_key_part1 = rsa_cipher.encrypt(aes_key[:half_aes_key_length])
 encrypted_aes_key_part2 = rsa_cipher.encrypt(aes_key[half_aes_key_length:])
 
-# Write the packets to two separate files, each containing one half of the encrypted AES key in the header
+# Write the packets to two separate files, each containing the iv and one half of the encrypted AES key in the header
 with open("packet1.dat", "wb") as f1, open("packet2.dat", "wb") as f2:
-    f1.write(encrypted_aes_key_part1 + cv_encrypted_with_aes)
-    f2.write(encrypted_aes_key_part2 + cv_encrypted_with_aes)
+    f1.write(iv + encrypted_aes_key_part1 + cv_encrypted_with_aes)
+    f2.write(iv + encrypted_aes_key_part2 + cv_encrypted_with_aes)
 
 print("Two packets with encrypted headers and AES-encrypted CV content have been created successfully!")
