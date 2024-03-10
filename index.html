@@ -8,6 +8,8 @@
 <body>
     <div id="job-posting"></div>
 
+    <button id="download-public-key">Download Public Key</button>
+
     <script>
         // the string variable contains XML data representing the job posting
         const xmlData = `<?xml version="1.0" encoding="UTF-8"?>
@@ -39,6 +41,7 @@
                     SQIDAQAB
                     
                     -----END PUBLIC KEY-----</publicKey>
+                <escrow> The specified Escrow address is: 0x1aa2374C920ab9fefb07E8Ce3DC9bb7A18283E3d </escrow>
             </job>`;
 
         // Parse the XML data using the DOMParser object
@@ -65,10 +68,25 @@
             <p><strong>Contact Email:</strong> ${xmlDoc.querySelector('contact_email').textContent}</p>
             <p><strong>Application Details:</strong> ${xmlDoc.querySelector('applicationDetails').textContent}</p>
             <p><strong>Public key:</strong> ${xmlDoc.querySelector('publicKey').textContent}</p>
+            <p><strong>Escrow Address: </strong> ${xmlDoc.querySelector('escrow').textContent} </p>
         `;
 
         // Inject HTML content into the document at the div element with job-posting ID
         document.getElementById('job-posting').innerHTML = htmlContent;
+
+        // Function to handle the download public key button click event
+        document.getElementById('download-public-key').addEventListener('click', function() {
+            const publicKeyContent = xmlDoc.querySelector('publicKey').textContent;
+            const blob = new Blob([publicKeyContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'public_key.pem';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
     </script>
 </body>
 </html>

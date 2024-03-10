@@ -1,5 +1,0 @@
-{
-    "name": "Encrypted CV with the first key half",
-    "description": "CV encrypted with the symmetric key and the first half of the symmetric key is encrypted with the recipients public key",
-    "image": "ipfs://bafkreibkt3fsuyeuvxupniajnm7amfts3tnubbr7l3goruzmayastyup34"
-}
