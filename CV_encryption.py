@@ -2,16 +2,16 @@ from Crypto.Cipher import AES, PKCS1_OAEP
 from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad
-from Crypto.Hash import SHA256
+#from Crypto.Hash import SHA256
 import base64
 import json
-import requests
+# import requests
+# import subprocess
 
 class Encryption:
-    def __init__(self, cv_file, public_key_file, nft_storage_api_key):
+    def __init__(self, cv_file, public_key_file):
         self.cv_file = cv_file
         self.public_key_file = public_key_file
-        self.nft_storage_api_key = nft_storage_api_key
 
     def read_cv_data(self):
         with open(self.cv_file, "rb") as f:
@@ -63,36 +63,10 @@ class Encryption:
 
         print("Packet with encrypted header and AES-encrypted CV content has been created successfully!")
         print("File with the second part of the symmetric key has been created.")
-        
-    def upload_to_nft_storage(self, files):
-        ipfs_links = {}
-
-        for file in files:
-            # Read the file content
-            with open(file, "rb") as f:
-                file_content = f.read()
-
-            # Set up headers with the API key
-            headers = {
-                "Authorization": f"Bearer {self.nft_storage_api_key}"
-            }
-
-            # Upload file to NFT.storage
-            response = requests.post("https://api.nft.storage/upload", files={"file": file_content}, headers=headers)
-            ipfs_link = response.json()["value"]["cid"]
-            ipfs_links[file] = f"https://cf-ipfs.com/ipfs/{ipfs_link}"
-
-        return ipfs_links
 
 # Usage
 cv_file = "CV.xml"  # Change to your CV file
 public_key_file = "public_key.pem"
-nft_storage_api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGZCMGQ3RDQ2MkU0RkQ2NUQ2NjY1MTI0OTgzYTFjOWQ3MTk0YkNGNzIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTcxMDA4ODMzNzYxOSwibmFtZSI6IlJlY3J1aXRtZW50In0.6rVcafYK6-w6W7yIQQTgPBbYKDX7t4s6aJjgnTXHwL4"
 
-encryptor = Encryption(cv_file, public_key_file, nft_storage_api_key)
+encryptor = Encryption(cv_file, public_key_file)
 encryptor.encrypt_cv_data()
-
-# Upload the files to NFT.storage
-ipfs_links = encryptor.upload_to_nft_storage(['cv_packet.json', 'cv_symmetric_key_part2.json'])
-for file, link in ipfs_links.items():
-    print(f"IPFS Link for {file}: {link}")
