@@ -1,9 +1,10 @@
 from Crypto.Cipher import AES, PKCS1_OAEP
 from Crypto.PublicKey import RSA
-import xml.etree.ElementTree as ET
 import base64
 import json
 import re
+
+from cv_parser import extract_cv_details
 
 class KeyValuePairExtractor:
     def __init__(self):
@@ -76,7 +77,8 @@ class Decryption:
     def decrypt_cv(self, symmetric_key, iv, encrypted_cv):
         cipher = AES.new(symmetric_key, AES.MODE_CBC, iv)
         decrypted_cv = cipher.decrypt(base64.b64decode(encrypted_cv))
-        return decrypted_cv.decode()  # Assume UTF-8 encoding
+        clean_cv = decrypted_cv.decode('utf-8').replace('\f', '')  # Remove form feed (U+000c)
+        return clean_cv 
 
     def process(self):
         # Load encrypted CV details
@@ -108,8 +110,13 @@ class Decryption:
         print(decrypted_cv)
         file_processor = FileProcessor() 
         file_processor.download_file(decrypted_cv, "decrypted_cv_1.xml")
-        
 
 # Usage
 decryption_instance = Decryption('downloaded_file_1.json', 'private_key.pem')
 decryption_instance.process()
+
+
+# Assuming the decryption process correctly created 'decrypted_cv_1.xml'
+xml_file = 'decrypted_cv_1.xml'  
+cv_details = extract_cv_details(xml_file)
+print(cv_details)

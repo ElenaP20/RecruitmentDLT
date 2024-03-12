@@ -97,8 +97,8 @@ if __name__ == "__main__":
     ipfs_handler = IpfsHandle()
     
     # Test downloading content for a specific CID
-    part_one = "QmYeRsZBt4J4kkVvoJBdiUj63HnEB4JDfL8e7GtnrmALTT"
-    part_two = "QmVTRw5Aef2BghHqZDDoSvcx48EBZmAD5zN6Lz37PgKHTS"
+    part_one = "QmZqRiJvuDNZJXAZxyzeeQzsdwQMGT53G7YsK7LnAnrgVw"
+    part_two = "QmNcjqHNZtYtyu93ExwtHGmxDn19zZUj8VVJGvcn7NHgGq"
     
     downloaded_file_path1 = ipfs_handler.get_file(part_one)
     downloaded_file_path2 = ipfs_handler.get_file(part_two)

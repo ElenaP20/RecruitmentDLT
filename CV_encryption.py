@@ -2,11 +2,8 @@ from Crypto.Cipher import AES, PKCS1_OAEP
 from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad
-#from Crypto.Hash import SHA256
 import base64
 import json
-# import requests
-# import subprocess
 
 class Encryption:
     def __init__(self, cv_file, public_key_file):
