@@ -1,0 +1,13 @@
+{
+    "part_one": {
+        "file_path": "downloaded_file_1.json",
+        "content_id": "QmZqRiJvuDNZJXAZxyzeeQzsdwQMGT53G7YsK7LnAnrgVw"
+    },
+    "part_two": {
+        "file_path": "downloaded_file_2.json",
+        "content_id": "QmNcjqHNZtYtyu93ExwtHGmxDn19zZUj8VVJGvcn7NHgGq"
+    },
+    "right_to_work": " Yes ",
+    "highest_education_level": "Bachelor",
+    "years_of_experience": 3
+}

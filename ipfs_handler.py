@@ -1,6 +1,8 @@
 from pathlib import Path
 from typing import Optional
 import requests
+import json
+from typing import Union
 
 class NoGatewayAvailable(Exception):
     pass
@@ -35,11 +37,11 @@ class IpfsHandle:
             print(f"Error: {e}")
             return None
     
-    def get_file(self, content_id) -> Path:
+    def get_file(self, content_id) -> Union[Path, str]:
         #get a valid gateway address and download the content
         gateway_address = self.get_valid_gateway()
         download_url = self.get_url(content_id, gateway_address)
-        return self.download(download_url)
+        return self.download(download_url), gateway_address
     
     def _generate_unique_file_name(self) -> str:
         index = 1
@@ -96,14 +98,36 @@ class IpfsHandle:
 if __name__ == "__main__":
     ipfs_handler = IpfsHandle()
     
-    # Test downloading content for a specific CID
+    # Faster way is:
+    # content_ids = [
+    #     "QmZqRiJvuDNZJXAZxyzeeQzsdwQMGT53G7YsK7LnAnrgVw",
+    #     "QmNcjqHNZtYtyu93ExwtHGmxDn19zZUj8VVJGvcn7NHgGq",
+    #     # Add more content IDs as needed
+    # ]
+    
+    # Define the content IDs
     part_one = "QmZqRiJvuDNZJXAZxyzeeQzsdwQMGT53G7YsK7LnAnrgVw"
     part_two = "QmNcjqHNZtYtyu93ExwtHGmxDn19zZUj8VVJGvcn7NHgGq"
     
-    downloaded_file_path1 = ipfs_handler.get_file(part_one)
-    downloaded_file_path2 = ipfs_handler.get_file(part_two)
+    downloaded_file_path1, gateway_address1 = ipfs_handler.get_file(part_one)
+    downloaded_file_path2, gateway_address2 = ipfs_handler.get_file(part_two)
     
     print(f"File downloaded at: {downloaded_file_path1}") 
     print(f"File downloaded at: {downloaded_file_path2}") 
-
+    
+    # Create a dictionary to store the details
+    ipfs_details = {
+        "part_one": {
+            "file_path": str(downloaded_file_path1),
+            "content_id": part_one
+        },
+        "part_two": {
+            "file_path": str(downloaded_file_path2),
+            "content_id": part_two
+        }
+    }
+    
+    # Save the details to a JSON file
+    with open("ipfs_details.json", "w") as json_file:
+        json.dump(ipfs_details, json_file)
     

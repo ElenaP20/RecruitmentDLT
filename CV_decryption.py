@@ -111,12 +111,13 @@ class Decryption:
         file_processor = FileProcessor() 
         file_processor.download_file(decrypted_cv, "decrypted_cv_1.xml")
 
+if __name__ == "__main__":
 # Usage
-decryption_instance = Decryption('downloaded_file_1.json', 'private_key.pem')
-decryption_instance.process()
+    decryption_instance = Decryption('downloaded_file_1.json', 'private_key.pem')
+    decryption_instance.process()
 
 
 # Assuming the decryption process correctly created 'decrypted_cv_1.xml'
-xml_file = 'decrypted_cv_1.xml'  
-cv_details = extract_cv_details(xml_file)
-print(cv_details)
+    xml_file = 'decrypted_cv_1.xml'  
+    cv_details = extract_cv_details(xml_file)
+    print(cv_details)

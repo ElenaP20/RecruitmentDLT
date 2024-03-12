@@ -1,4 +1,5 @@
 const { Web3 } = require('web3');
+const fs = require('fs'); // Import Node.js file system module
 //to establish connection: address of Advert.sol, Ganache RPC, Advert.sol ABI json
 
 //const axios = require('axios');
@@ -33,43 +34,30 @@ const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
 // Define an asynchronous function to interact with the contract
 async function getAllIPFSLinks() {
     try {
-        // Call the getAllIPFSLinks function of the smart contract to retrieve the IPFS links
         const result = await contractInstance.methods.getAllIPFSLinks().call();
 
-        // Extracting IPFS links and second parts from the result
         const ipfsLinks = result[0];
         const secondParts = result[1];
 
-//         // Iterate over each IPFS link
-//         for (let i = 0; i < ipfsLinks.length; i++) {
-//             const ipfsLink = ipfsLinks[i];
-//             const secondPart = secondParts[i];
+        // Construct an object containing IPFS links and second parts
+        const data = {
+            ipfsLinks: ipfsLinks.filter(link => link !== ''),
+            secondParts: secondParts.filter(part => part !== '')
+        };
 
-//             // Fetch encrypted data from IPFS link
-//             const response = await axios.get(`http://127.0.0.1:8080/ipfs/${ipfsLink}`);
-//             const encryptedData = response.data;
+        // Convert the data object to JSON
+        const jsonData = JSON.stringify(data, null, 2);
 
-//             // Process the encrypted data as needed
-//             console.log("Encrypted Data:", encryptedData);
+        // Write the JSON data to a file
+        fs.writeFileSync('ipfs_data.json', jsonData, 'utf-8');
 
-//             // Process the second part of the data if needed
-//             console.log("Second Part:", secondPart);
-//         }
-//     } catch (error) {
-//         console.error("Error fetching IPFS links:", error);
-//     }
-// }
-        // Log or process the IPFS links and second parts
-        console.log("IPFS Links:", ipfsLinks.filter(link => link !== ''));
-        console.log("Second Parts:", secondParts.filter(part => part !== ''));
+        console.log("Data written to ipfs_data.json successfully.");
 
     } catch (error) {
         console.error("Error fetching IPFS links:", error);
     }
 }
 
-
-// Call the function to interact with the contract
 getAllIPFSLinks();
 
 // const { Web3 } = require('web3');
