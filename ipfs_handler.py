@@ -32,11 +32,11 @@ class IpfsHandle:
                 self._downloaded_files.add(file_name)
                 return file_path
             else:
-                raise Exception(f"Failed to download file from {url}")
+                raise Exception(f"Failed to download file from {url}: {response.status_code}")
         except requests.exceptions.RequestException as e:
             print(f"Error: {e}")
             return None
-    
+
     def get_file(self, content_id) -> Union[Path, str]:
         #get a valid gateway address and download the content
         gateway_address = self.get_valid_gateway()
