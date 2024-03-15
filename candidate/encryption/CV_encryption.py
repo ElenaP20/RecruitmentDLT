@@ -33,7 +33,7 @@ class Encryption:
         rsa_cipher = PKCS1_OAEP.new(rsa_public_key)
         return rsa_cipher.encrypt(data)
 
-    def encrypt_cv_data(self):
+    def encrypt_cv_data(self, cv_packet_file, symmetric_key_file):
         cv_data = self.read_cv_data()
         aes_key = self.generate_aes_key()
         iv = self.generate_iv()  # Generate IV
@@ -51,19 +51,22 @@ class Encryption:
             "Body": base64.b64encode(aes_encrypted_cv).decode('utf-8')
         }
 
-        with open("cv_packet.json", "w") as f:
+        with open(cv_packet_file, "w") as f:
             json.dump(cv_packet, f)
 
         # Create a separate file for the second part of the symmetric key
-        with open("cv_symmetric_key_part2.json", "w") as f:
+        with open(symmetric_key_file, "w") as f:
             json.dump({"SymmetricKeyPart2": base64.b64encode(encrypted_aes_key_part2).decode('utf-8')}, f)
 
         print("Packet with encrypted header and AES-encrypted CV content has been created successfully!")
         print("File with the second part of the symmetric key has been created.")
 
-# Usage
-cv_file = "CV.xml"  # Change to your CV file
-public_key_file = "public_key.pem"
+if __name__ == "__main__":
+    # Usage
+    cv_file = input("Enter the path to your CV file: ")
+    public_key_file = "public_key.pem"
+    cv_packet_file = input("Enter the name for the CV packet JSON file: ")
+    symmetric_key_file = input("Enter the name for the symmetric key JSON file: ")
 
-encryptor = Encryption(cv_file, public_key_file)
-encryptor.encrypt_cv_data()
+    encryptor = Encryption(cv_file, public_key_file)
+    encryptor.encrypt_cv_data(cv_packet_file, symmetric_key_file)

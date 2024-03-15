@@ -1,72 +1,10 @@
+from pathlib import Path
 from Crypto.Cipher import AES, PKCS1_OAEP
 from Crypto.PublicKey import RSA
-from pathlib import Path
 import base64
 import json
-import re
-import sys 
 
-# Add the parent directory of the current directory to the Python path
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-
-# Importing modules from the parent directory
-#from ipfs_handler_employer import IpfsHandler, NoGatewayAvailable
-#from cv_parser import extract_cv_details
-
-# Class for extracting key-value pairs from text
-class KeyValuePairExtractor:
-    def __init__(self):
-        self.pattern = r'"([^"]+)"\s*:\s*"(.*?)"'
-        self.second_pattern = r'secondhalf:\s*"([^"]+)"'
-        self.extracted_values = {}  # Initialize extracted_values attribute
-
-    def extract_key_value_pairs_from_text(self, text):
-        # Find all matches for key-value pairs
-        matches = re.findall(self.pattern, text)
-        # Find matches for the second half pattern
-        second_matches = re.findall(self.second_pattern, text)
-        
-        # Extract key-value pairs and store in the dictionary
-        for key, value in matches:
-            self.extracted_values[key] = value
-        
-        # Extract the second half value and store in the dictionary
-        for match in second_matches:
-            self.extracted_values['secondhalf'] = match
-        
-        return matches
-    
-# Class for processing files
-class FileProcessor:
-    def __init__(self):
-        self.key_value_extractor = KeyValuePairExtractor()
-        self._downloaded_files = set()  # Initialize set to track downloaded files
-
-    def process_file_content(self, file_content):
-        # Process file content and extract key-value pairs
-        if isinstance(file_content, str):
-            extracted_pairs = self.key_value_extractor.extract_key_value_pairs_from_text(file_content)
-
-            print("Extracted key-value pairs:")
-            for key, value in extracted_pairs:
-                print(f"{key} -> {value}")
-        else:
-            print("Input is not a valid string.")
-
-    def read_file_content(self, file_path):
-        # Read the content of a file
-        with open(file_path, 'r') as file:
-            content = file.read()
-        return content
-    
-    def download_file(self, content, file_path): 
-        # Remove non-printable characters, including form feed characters
-        cleaned_content = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', content)
-        # Write the cleaned content to a file
-        with open(file_path, 'w') as file:
-            file.write(cleaned_content)
-        # Add downloaded file name to set
-        self._downloaded_files.add(file_path.name)
+#from key_value_extractor import KeyValuePairExtractor
 
 # Class for decryption process
 class Decryption:
@@ -74,7 +12,7 @@ class Decryption:
     _downloaded_files = set()  # Class-level set to track downloaded files
     
     def __init__(self, encrypted_cv_file, second_half, private_key_file, file_processor):
-        self.key_value_extractor = KeyValuePairExtractor()
+        #self.key_value_extractor = KeyValuePairExtractor()
         self.encrypted_cv_file = encrypted_cv_file
         self.second_half = second_half
         self.private_key_file = private_key_file
@@ -119,7 +57,6 @@ class Decryption:
             if file_name not in Decryption._downloaded_files:
                 return file_name
             index += 1
-
     
     def process(self):
         # Load encrypted CV details from the first half
@@ -158,19 +95,4 @@ class Decryption:
         Decryption._downloaded_files.add(file_path.name)
         
         print("Decrypted CV can be found in the following file: ", file_path)
-
-# # Entry point of the script
-# if __name__ == '__main__':
-#     # Initialize FileProcessor instances
-#     file_processor1 = FileProcessor()
-#     file_processor2 = FileProcessor()
-    
-#     # Initialize Decryption instances
-#     decryption1 = Decryption("downloaded_file_1.json", "downloaded_file_2.json", "private_key.pem", file_processor1)
-#     decryption2 = Decryption("downloaded_file_3.json", "downloaded_file_4.json", "private_key.pem", file_processor2)
-
-#     # Process decryption for the first set of files
-#     decryption1.process()
-
-#     # Process decryption for the second set of files
-#     decryption2.process()
+        
