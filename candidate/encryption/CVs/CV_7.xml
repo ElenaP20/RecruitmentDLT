@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cv>
+    <personal_info>
+        <name>Christopher Brown</name>
+        <email>christopher.brown@example.com</email>
+        <phone>678-901-234</phone>
+    </personal_info>
+    <right_to_work>No</right_to_work>
+    <education>
+        <institution>Primary School</institution>
+        <degree>Primary School Diploma</degree>
+        <graduation_year>2012</graduation_year>
+    </education>
+    <experience>
+        <company_name>Family Business</company_name>
+        <position>Assistant Manager</position>
+        <dates>2018-Present</dates>
+        <description>Assisted in managing daily operations and customer service.</description>
+    </experience>
+    <skills>
+        <skill>Customer Service</skill>
+        <skill>Team Management</skill>
+        <skill>Communication</skill>
+    </skills>
+</cv>

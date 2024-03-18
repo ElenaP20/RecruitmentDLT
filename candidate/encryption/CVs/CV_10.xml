@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cv>
+    <personal_info>
+        <name>Amy Johnson</name>
+        <email>amy.johnson@example.com</email>
+        <phone>234-567-890</phone>
+    </personal_info>
+    <right_to_work>Yes</right_to_work>
+    <education>
+        <institution>Community College</institution>
+        <degree>Associate Degree in Accounting</degree>
+        <graduation_year>2021</graduation_year>
+    </education>
+    <experience>
+        <company_name>Accounting Firm</company_name>
+        <position>Junior Accountant</position>
+        <dates>2021-Present</dates>
+        <description>Assisted in preparing financial statements and reconciling accounts.</description>
+    </experience>
+    <skills>
+        <skill>Accounting Principles</skill>
+        <skill>Financial Reporting</skill>
+        <skill>Bookkeeping</skill>
+    </skills>
+</cv>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cv>
+    <personal_info>
+        <name>John Doe</name>
+        <email>john.doe@example.com</email>
+        <phone>456-789-012</phone>
+    </personal_info>
+    <right_to_work>No</right_to_work>
+    <education>
+        <institution>College Name</institution>
+        <degree>Bachelor of Arts</degree>
+        <graduation_year>2018</graduation_year>
+        <institution>High School</institution>
+        <degree>High School Diploma</degree>
+        <graduation_year>2014</graduation_year>
+    </education>
+    <experience>
+        <company_name>XYZ Corporation</company_name>
+        <position>Junior Developer</position>
+        <dates>2020-2022</dates>
+        <description>Developed web applications using Python and Django.</description>
+    </experience>
+    <skills>
+        <skill>Java</skill>
+        <skill>CSS</skill>
+        <skill>MySQL</skill>
+        <skill>Teamwork</skill>
+        <skill>Problem Solving</skill>
+    </skills>
+</cv>

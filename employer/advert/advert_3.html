@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Engineer</title>
+</head>
+<body>
+    <div id="job-posting"></div>
+    <button id="download-public-key">Download Public Key</button>
+    <script>
+        const xmlData2 = `<?xml version="1.0" encoding="UTF-8"?>
+            <job>
+                <title>Software Engineer</title>
+                <company>Tech Innovations Ltd.</company>
+                <location>San Francisco, CA</location>
+                <type>Full-time</type>  
+                <description>We are looking for a skilled Software Engineer to join our team. The ideal candidate will have experience in developing scalable web applications and a strong understanding of modern technologies.</description>
+                <responsibilities>
+                    <item>Design, develop, and maintain software applications.</item>
+                    <item>Collaborate with cross-functional teams to define, design, and ship new features.</item>
+                </responsibilities>
+                <requirements>
+                    <item>Bachelor's degree in Computer Science or related field.</item>
+                    <item>Proficiency in JavaScript, HTML, and CSS.</item>
+                </requirements>  
+                <salary>$80,000 - $100,000 per year</salary> 
+                <contact_email>email@email.com</contact_email>
+                <applicationDetails>Application details here.</applicationDetails>
+                <publicKey>-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqCA0ssxlD6do7v+8eVjyJ/aaXvsYpFLvcrd0/TBgA/QhvIkim2A9w6CWPumZnIMHFWyoqODJnFgBFNKVuXk8YPfqzc/B1nDc6k2to9FKWf2IWFvo4JKTfDsPX0kVFZ276a/alXyj0NBN6MTMraH70YcK4qmHy8wCXV5d+ht3I1l6uJT1NNX6GTCD0FvZmaLzmfqcx7WBtReQLMXSkVUtBKaJp5tTAcUdOkGAkq9hJFnhwxiBxDpICrBizmPUdDgqiNdh2QQpRjuxup868DFXIWMlwFm+EizkK9siDCk+EqCcXIHfi0DvSSXVTz8jE3JDBa9GcyXj/coUPu9iNSSBSQIDAQAB-----END PUBLIC KEY-----</publicKey>
+                <escrow>The specified Escrow address is: 0x1aa2374C920ab9fefb07E8Ce3DC9bb7A18283E3d</escrow>
+            </job>`;
+
+        const parser2 = new DOMParser();
+        const xmlDoc2 = parser2.parseFromString(xmlData2, "text/xml");
+        let htmlContent2 = `
+            <h1>${xmlDoc2.querySelector('title').textContent}</h1>
+            <p><strong>Company:</strong> ${xmlDoc2.querySelector('company').textContent}</p>
+            <p><strong>Location:</strong> ${xmlDoc2.querySelector('location').textContent}</p>
+            <p><strong>Type:</strong> ${xmlDoc2.querySelector('type').textContent}</p>
+            <p><strong>Description:</strong> ${xmlDoc2.querySelector('description').textContent}</p>
+            <h2>Responsibilities:</h2>
+            <ul>
+                ${Array.from(xmlDoc2.querySelectorAll('responsibilities item')).map(item => `<li>${item.textContent}</li>`).join('')}
+            </ul>
+            <h2>Requirements:</h2>
+            <ul>
+                ${Array.from(xmlDoc2.querySelectorAll('requirements item')).map(item => `<li>${item.textContent}</li>`).join('')}
+            </ul>
+            <p><strong>Salary:</strong> ${xmlDoc2.querySelector('salary').textContent}</p>
+            <p><strong>Contact Email:</strong> ${xmlDoc2.querySelector('contact_email').textContent}</p>
+            <p><strong>Application Details:</strong> ${xmlDoc2.querySelector('applicationDetails').textContent}</p>
+            <p><strong>Public key:</strong> ${xmlDoc2.querySelector('publicKey').textContent}</p>
+            <p><strong>Escrow Address: </strong> ${xmlDoc2.querySelector('escrow').textContent} </p>
+        `;
+        document.getElementById('job-posting').innerHTML = htmlContent2;
+
+        document.getElementById('download-public-key').addEventListener('click', function() {
+            const publicKeyContent = xmlDoc2.querySelector('publicKey').textContent;
+            const blob = new Blob([publicKeyContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'public_key.pem';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

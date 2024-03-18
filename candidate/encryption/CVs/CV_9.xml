@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cv>
+    <personal_info>
+        <name>Thomas Wilson</name>
+        <email>thomas.wilson@example.com</email>
+        <phone>890-123-456</phone>
+    </personal_info>
+    <right_to_work>Yes</right_to_work>
+    <education>
+        <institution>Community College</institution>
+        <degree>Associate Degree in Information Technology</degree>
+        <graduation_year>2019</graduation_year>
+    </education>
+    <experience>
+        <company_name>Tech Solutions</company_name>
+        <position>IT Support Specialist</position>
+        <dates>2020-2022</dates>
+        <description>Provided technical support and troubleshooting for software and hardware issues.</description>
+    </experience>
+    <skills>
+        <skill>Technical Support</skill>
+        <skill>Networking</skill>
+        <skill>Troubleshooting</skill>
+    </skills>
+</cv>

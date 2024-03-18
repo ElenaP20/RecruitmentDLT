@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic Designer</title>
+</head>
+<body>
+    <div id="job-posting"></div>
+
+    <button id="download-public-key">Download Public Key</button>
+
+    <script>
+        // the string variable contains XML data representing the job posting
+        const xmlData = `<?xml version="1.0" encoding="UTF-8"?>
+        <job>
+            <title>Graphic Designer</title>
+            <company>Design Studio</company>
+            <location>New York, NY</location>
+            <type>Full-time</type>  
+            <description>We are seeking a talented Graphic Designer to join our creative team. The ideal candidate will have a strong portfolio and proficiency in Adobe Creative Suite.</description>
+            <responsibilities>
+                <item>Create visually appealing graphics for various projects.</item>
+                <item>Collaborate with the marketing team to design promotional materials.</item>
+            </responsibilities>
+            <requirements>
+                <item>Bachelor's degree in Graphic Design or related field.</item>
+                <item>Proficiency in Adobe Creative Suite (Photoshop, Illustrator, InDesign).</item>
+            </requirements>  
+            <salary>$50,000 - $60,000 per year</salary> 
+            <contact_email>jobs@designstudio.com</contact_email>
+            <applicationDetails>Application details here.</applicationDetails>
+                <publicKey> -----BEGIN PUBLIC KEY-----
+
+                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqCA0ssxlD6do7v+8eVjy
+                    J/aaXvsYpFLvcrd0/TBgA/QhvIkim2A9w6CWPumZnIMHFWyoqODJnFgBFNKVuXk8
+                    YPfqzc/B1nDc6k2to9FKWf2IWFvo4JKTfDsPX0kVFZ276a/alXyj0NBN6MTMraH7
+                    0YcK4qmHy8wCXV5d+ht3I1l6uJT1NNX6GTCD0FvZmaLzmfqcx7WBtReQLMXSkVUt
+                    BKaJp5tTAcUdOkGAkq9hJFnhwxiBxDpICrBizmPUdDgqiNdh2QQpRjuxup868DFX
+                    IWMlwFm+EizkK9siDCk+EqCcXIHfi0DvSSXVTz8jE3JDBa9GcyXj/coUPu9iNSSB
+                    SQIDAQAB
+                    
+                    -----END PUBLIC KEY-----</publicKey>
+                <escrow> The specified Escrow address is: 0x1aa2374C920ab9fefb07E8Ce3DC9bb7A18283E3d </escrow>
+            </job>`;
+
+        // Parse the XML data using the DOMParser object
+        const parser = new DOMParser();
+        // Parses the xmlData and creates a DOM document object 
+        const xmlDoc = parser.parseFromString(xmlData, "text/xml");
+
+        // Dynamically generate HTML content from the parsed XML document
+        let htmlContent = `
+            <h1>${xmlDoc.querySelector('title').textContent}</h1>
+            <p><strong>Company:</strong> ${xmlDoc.querySelector('company').textContent}</p>
+            <p><strong>Location:</strong> ${xmlDoc.querySelector('location').textContent}</p>
+            <p><strong>Type:</strong> ${xmlDoc.querySelector('type').textContent}</p>
+            <p><strong>Description:</strong> ${xmlDoc.querySelector('description').textContent}</p>
+            <h2>Responsibilities:</h2>
+            <ul>
+                ${Array.from(xmlDoc.querySelectorAll('responsibilities item')).map(item => `<li>${item.textContent}</li>`).join('')}
+            </ul>
+            <h2>Requirements:</h2>
+            <ul>
+                ${Array.from(xmlDoc.querySelectorAll('requirements item')).map(item => `<li>${item.textContent}</li>`).join('')}
+            </ul>
+            <p><strong>Salary:</strong> ${xmlDoc.querySelector('salary').textContent}</p>
+            <p><strong>Contact Email:</strong> ${xmlDoc.querySelector('contact_email').textContent}</p>
+            <p><strong>Application Details:</strong> ${xmlDoc.querySelector('applicationDetails').textContent}</p>
+            <p><strong>Public key:</strong> ${xmlDoc.querySelector('publicKey').textContent}</p>
+            <p><strong>Escrow Address: </strong> ${xmlDoc.querySelector('escrow').textContent} </p>
+        `;
+
+        // Inject HTML content into the document at the div element with job-posting ID
+        document.getElementById('job-posting').innerHTML = htmlContent;
+
+        // Function to handle the download public key button click event
+        document.getElementById('download-public-key').addEventListener('click', function() {
+            const publicKeyContent = xmlDoc.querySelector('publicKey').textContent;
+            const blob = new Blob([publicKeyContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'public_key.pem';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

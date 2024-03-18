@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Coordinator</title>
+</head>
+<body>
+    <div id="job-posting"></div>
+    <button id="download-public-key">Download Public Key</button>
+    <script>
+        const xmlData1 = `<?xml version="1.0" encoding="UTF-8"?>
+            <job>
+                <title>Marketing Coordinator</title>
+                <company>Marketing Solutions Inc.</company>
+                <location>New York, NY</location>
+                <type>Full-time</type>  
+                <description>We are seeking a motivated Marketing Coordinator to join our team. The ideal candidate will have strong communication skills and a creative mindset.</description>
+                <responsibilities>
+                    <item>Assist in the development of marketing campaigns.</item>
+                    <item>Coordinate promotional events and activities.</item>
+                </responsibilities>
+                <requirements>
+                    <item>Bachelor's degree in Marketing or related field.</item>
+                    <item>Experience with social media marketing platforms.</item>
+                </requirements>  
+                <salary>$40,000 - $50,000 per year</salary> 
+                <contact_email>email@email.com</contact_email>
+                <applicationDetails>Application details here.</applicationDetails>
+                <publicKey>-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqCA0ssxlD6do7v+8eVjyJ/aaXvsYpFLvcrd0/TBgA/QhvIkim2A9w6CWPumZnIMHFWyoqODJnFgBFNKVuXk8YPfqzc/B1nDc6k2to9FKWf2IWFvo4JKTfDsPX0kVFZ276a/alXyj0NBN6MTMraH70YcK4qmHy8wCXV5d+ht3I1l6uJT1NNX6GTCD0FvZmaLzmfqcx7WBtReQLMXSkVUtBKaJp5tTAcUdOkGAkq9hJFnhwxiBxDpICrBizmPUdDgqiNdh2QQpRjuxup868DFXIWMlwFm+EizkK9siDCk+EqCcXIHfi0DvSSXVTz8jE3JDBa9GcyXj/coUPu9iNSSBSQIDAQAB-----END PUBLIC KEY-----</publicKey>
+                <escrow>The specified Escrow address is: 0x1aa2374C920ab9fefb07E8Ce3DC9bb7A18283E3d</escrow>
+            </job>`;
+
+        const parser1 = new DOMParser();
+        const xmlDoc1 = parser1.parseFromString(xmlData1, "text/xml");
+        let htmlContent1 = `
+            <h1>${xmlDoc1.querySelector('title').textContent}</h1>
+            <p><strong>Company:</strong> ${xmlDoc1.querySelector('company').textContent}</p>
+            <p><strong>Location:</strong> ${xmlDoc1.querySelector('location').textContent}</p>
+            <p><strong>Type:</strong> ${xmlDoc1.querySelector('type').textContent}</p>
+            <p><strong>Description:</strong> ${xmlDoc1.querySelector('description').textContent}</p>
+            <h2>Responsibilities:</h2>
+            <ul>
+                ${Array.from(xmlDoc1.querySelectorAll('responsibilities item')).map(item => `<li>${item.textContent}</li>`).join('')}
+            </ul>
+            <h2>Requirements:</h2>
+            <ul>
+                ${Array.from(xmlDoc1.querySelectorAll('requirements item')).map(item => `<li>${item.textContent}</li>`).join('')}
+            </ul>
+            <p><strong>Salary:</strong> ${xmlDoc1.querySelector('salary').textContent}</p>
+            <p><strong>Contact Email:</strong> ${xmlDoc1.querySelector('contact_email').textContent}</p>
+            <p><strong>Application Details:</strong> ${xmlDoc1.querySelector('applicationDetails').textContent}</p>
+            <p><strong>Public key:</strong> ${xmlDoc1.querySelector('publicKey').textContent}</p>
+            <p><strong>Escrow Address: </strong> ${xmlDoc1.querySelector('escrow').textContent} </p>
+        `;
+        document.getElementById('job-posting').innerHTML = htmlContent1;
+
+        document.getElementById('download-public-key').addEventListener('click', function() {
+            const publicKeyContent = xmlDoc1.querySelector('publicKey').textContent;
+            const blob = new Blob([publicKeyContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'public_key.pem';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

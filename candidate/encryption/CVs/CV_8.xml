@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cv>
+    <personal_info>
+        <name>Samantha White</name>
+        <email>samantha.white@example.com</email>
+        <phone>789-012-345</phone>
+    </personal_info>
+    <right_to_work>Yes</right_to_work>
+    <education>
+        <institution>University of Science</institution>
+        <degree>Doctor of Philosophy</degree>
+        <graduation_year>2020</graduation_year>
+    </education>
+    <experience>
+        <company_name>Research Institute</company_name>
+        <position>Research Scientist</position>
+        <dates>2021-Present</dates>
+        <description>Conducted experiments and analyzed data to advance scientific knowledge.</description>
+    </experience>
+    <skills>
+        <skill>Research Methodology</skill>
+        <skill>Data Analysis</skill>
+        <skill>Scientific Writing</skill>
+    </skills>
+</cv>

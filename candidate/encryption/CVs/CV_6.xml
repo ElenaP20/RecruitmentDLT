@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cv>
+    <personal_info>
+        <name>Robert Miller</name>
+        <email>robert.miller@example.com</email>
+        <phone>567-890-123</phone>
+    </personal_info>
+    <right_to_work>Yes</right_to_work>
+    <education>
+        <institution>University of Business</institution>
+        <degree>Bachelor of Business Administration</degree>
+        <graduation_year>2019</graduation_year>
+    </education>
+    <experience>
+        <company_name>Global Enterprises</company_name>
+        <position>Business Analyst</position>
+        <dates>2020-2023</dates>
+        <description>Analyzed market trends and financial data to support business decision-making.</description>
+    </experience>
+    <skills>
+        <skill>Financial Analysis</skill>
+        <skill>Market Research</skill>
+        <skill>Data Analysis</skill>
+    </skills>
+</cv>

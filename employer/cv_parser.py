@@ -3,6 +3,7 @@ import json
 
 PRIMARY_EDUCATION_SCORE = 0
 HIGH_SCHOOL_SCORE = 5
+ASSOCIATE_DEGREE_SCORE = 7 
 BACHELOR_DEGREE_SCORE = 10
 MASTERS_DEGREE_SCORE = 15
 DOCTORATE_SCORE = 20
@@ -27,6 +28,8 @@ class CVProcessor:
             return PRIMARY_EDUCATION_SCORE
         elif "high school" in education_level:
             return HIGH_SCHOOL_SCORE
+        elif "associate" in education_level:  # Check for associate degree
+            return ASSOCIATE_DEGREE_SCORE
         elif "bachelor" in education_level:
             return BACHELOR_DEGREE_SCORE
         elif "master" in education_level:
@@ -50,7 +53,7 @@ class CVProcessor:
                     education_levels.append(degree)
 
                 highest_education_level = None
-                education_order = ['Ph.D.', 'Master', 'Bachelor', 'High School', 'Primary']
+                education_order = ['Ph.D.', 'Master', 'Bachelor', 'Associate', 'High School', 'Primary']
                 for edu_level in education_order:
                     if any(edu_level.lower() in level.lower() for level in education_levels):
                         highest_education_level = edu_level

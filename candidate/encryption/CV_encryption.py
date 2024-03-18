@@ -4,11 +4,13 @@ from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad
 import base64
 import json
+import os
 
 class Encryption:
-    def __init__(self, cv_file, public_key_file):
+    def __init__(self, cv_file, public_key_file, output_folder):
         self.cv_file = cv_file
         self.public_key_file = public_key_file
+        self.output_folder = output_folder
 
     def read_cv_data(self):
         with open(self.cv_file, "rb") as f:
@@ -51,11 +53,18 @@ class Encryption:
             "Body": base64.b64encode(aes_encrypted_cv).decode('utf-8')
         }
 
-        with open(cv_packet_file, "w") as f:
+        # Create the output folder if it doesn't exist
+        if not os.path.exists(self.output_folder):
+            os.makedirs(self.output_folder)
+
+        # Writing the CV packet to the output folder
+        cv_packet_file_path = os.path.join(self.output_folder, cv_packet_file)
+        with open(cv_packet_file_path, "w") as f:
             json.dump(cv_packet, f)
 
-        # Create a separate file for the second part of the symmetric key
-        with open(symmetric_key_file, "w") as f:
+        # Create a separate file for the second part of the symmetric key in the output folder
+        symmetric_key_file_path = os.path.join(self.output_folder, symmetric_key_file)
+        with open(symmetric_key_file_path, "w") as f:
             json.dump({"SymmetricKeyPart2": base64.b64encode(encrypted_aes_key_part2).decode('utf-8')}, f)
 
         print("Packet with encrypted header and AES-encrypted CV content has been created successfully!")
@@ -65,8 +74,9 @@ if __name__ == "__main__":
     # Usage
     cv_file = input("Enter the path to your CV file: ")
     public_key_file = "public_key.pem"
+    output_folder = "encrypted_CVs"
     cv_packet_file = input("Enter the name for the CV packet JSON file: ")
     symmetric_key_file = input("Enter the name for the symmetric key JSON file: ")
 
-    encryptor = Encryption(cv_file, public_key_file)
+    encryptor = Encryption(cv_file, public_key_file, output_folder)
     encryptor.encrypt_cv_data(cv_packet_file, symmetric_key_file)

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cv>
+    <personal_info>
+        <name>Emily Davis</name>
+        <email>emily.davis@example.com</email>
+        <phone>234-567-890</phone>
+    </personal_info>
+    <right_to_work>No</right_to_work>
+    <education>
+        <institution>Art School</institution>
+        <degree>Bachelor of Fine Arts</degree>
+        <graduation_year>2017</graduation_year>
+    </education>
+    <experience>
+        <company_name>Art Gallery XYZ</company_name>
+        <position>Gallery Assistant</position>
+        <dates>2018-2020</dates>
+        <description>Assisted in curating exhibitions and managing gallery operations.</description>
+    </experience>
+    <skills>
+        <skill>Art curation</skill>
+        <skill>Customer Service</skill>
+        <skill>Event Planning</skill>
+    </skills>
+</cv>
