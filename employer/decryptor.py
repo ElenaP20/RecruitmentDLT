@@ -95,4 +95,5 @@ class Decryption:
         Decryption._downloaded_files.add(file_path.name)
         
         print("Decrypted CV can be found in the following file: ", file_path)
+        return file_path
         

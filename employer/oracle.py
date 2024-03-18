@@ -10,7 +10,7 @@ from pathlib import Path
 web3 = Web3(Web3.HTTPProvider('http://localhost:7546'))
 
 # Contract address and ABI
-contract_address = '0xa8743e430b1F6e45e625B928CD6281FF074bB71e'
+contract_address = '0xC573299d9c4Dfee429Be2223562C02D758b0438e'
 with open('abi.json', 'r') as f:
     contract_abi = json.load(f)
 
@@ -48,13 +48,12 @@ def get_all_ipfs_links():
     except Exception as e:
         print("Error fetching IPFS links:", e)
       
-def getTokens():
-    try:
-        result = contract.functions.getTokens().call()
-        print(result)
-    except Exception as e:
-        print("Error fetching IPFS tokens:", e)
-
+# def getTokens():
+#     try:
+#         result = contract.functions.getTokens().call()
+#         print(result)
+#     except Exception as e:
+#         print("Error fetching IPFS tokens:", e)
 
 def main():
     # Run the function to fetch tokens and IPFS links
@@ -105,8 +104,100 @@ def main():
                 print(f"Total score received for token with ID of {token_id} : {total_score}")
             except Exception as e:
                 print(f"Error processing token {token_id}: {e}")
+            try:
+                tx_hash = contract.functions.updateTotalScore(ipfs_link, second_part, total_score).transact({
+                    'from': account_address,
+                })
+                receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
+                print(f"Total score received for the links {ipfs_link} and {second_part} : {total_score}")
+            except Exception as e:
+                print(f"Error processing the links {ipfs_link} and {second_part}: {e}")
 
 
+def evaluate(token_id, ipfs_link, second_part,score, ipfs_file):
+    # Initialize IpfsHandle instance
+            handler = IpfsHandle()
+
+            # Download the first file
+            downloaded_file_path1, _ = handler.get_file(ipfs_link)
+            print(f"File downloaded at: {downloaded_file_path1}")
+
+            # Download the second file
+            downloaded_file_path2, _ = handler.get_file(second_part)
+            print(f"File downloaded at: {downloaded_file_path2}")
+
+            # Initialize FileProcessor instances for each pair
+            file_processor1 = FileProcessor()
+
+            # Initialize Decryption instances for each pair
+            decryption1 = Decryption(downloaded_file_path1, downloaded_file_path2, "private_key.pem", file_processor1)
+
+            # Process decryption for the pair of files
+            #xml_file = decryption1.process()
+
+            # Call CVProcessor to extract CV details from decrypted XML files
+            xml_file = [f"decrypted_file_1.xml"]
+            cv_processor = CVProcessor(xml_file, ipfs_file)
+            total_score = cv_processor.extract_cv_details()
+
+            # Call the smart contract function to receive the total score for the pair
+            try:
+                tx_hash = contract.functions.receiveTotalScoreForPair(int(token_id), total_score).transact({
+                    'from': account_address,
+                })
+                receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
+                print(f"Total score received for token with ID of {token_id} : {total_score}")
+            except Exception as e:
+                print(f"Error processing token {token_id}: {e}")
+            try:
+                tx_hash = contract.functions.updateTotalScore(ipfs_link, second_part, total_score).transact({
+                    'from': account_address,
+                })
+                receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
+                print(f"Total score received for the links {ipfs_link} and {second_part} : {total_score}")
+            except Exception as e:
+                print(f"Error processing the links {ipfs_link} and {second_part}: {e}")
 # Run the main function
-main()
+#main()
 # handle_event()
+# Function to handle TotalScoreReceived event
+def handle_event(event):
+    print("Total Score Received event detected!")
+    _tokenId = event['args']['_tokenId']
+    link1 = event['args']['ipfsLink1']
+    link2 = event['args']['ipfsLink2']
+    score = event['args']['totalScore']
+    print("TokenId:", _tokenId)
+    print("IPFS Link 1:", link1)
+    print("IPFS Link 2:", link2)
+    print("Total Score:", score)
+    print("Evaluation started...")
+    # Combine the processed content into a dictionary
+    combined_data = {
+        "ipfsLink1": link1,
+        "ipfsLink2": link2
+    }
+
+    # Write the combined data to a JSON file
+    with open('combined_data.json', 'w') as json_file:
+        json.dump(combined_data, json_file)
+
+    # Pass the created JSON file along with other parameters to the evaluate function
+    evaluate(_tokenId, link1, link2, score, 'combined_data.json')
+
+    
+# Create event filter for TotalScoreCheck event
+event_filter = contract.events.TotalScoreCheck.create_filter(fromBlock='latest')
+
+# Main loop to listen for events
+while True:
+    try:
+        # Get new event logs
+        logs = event_filter.get_new_entries()
+        for log in logs:
+            handle_event(log)
+    except KeyboardInterrupt:
+        print("Exiting event listener.")
+        break
+    except Exception as e:
+        print("Error:", e)
