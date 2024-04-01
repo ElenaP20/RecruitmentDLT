@@ -1,4 +1,5 @@
 #importing necessary libraries and modules
+import time
 from web3 import Web3
 import json
 from ipfs_handler import IpfsHandle
@@ -8,6 +9,12 @@ from cv_parser import CVProcessor
 from pathlib import Path
 from contract_wrapper import ContractWrapper
 
+# Define a function to handle the ExecutionTime event
+def handle_execution_time(event):
+    # Extract the execution time from the event
+    execution_time = event['args']['time']
+    print("Execution time:", execution_time, "seconds")
+    
 #defining Oracle class for interacting with the Ethereum contract and handling events
 class Oracle:
     
@@ -21,11 +28,31 @@ class Oracle:
         
         #initializing FileProcessor instance for file processing
         self.file_processor = FileProcessor()  
+        
+        # Subscribing to the ExecutionTime event
+        self.execution_time_filter = self.contract_wrapper.contract.events.ExecutionTime.create_filter(fromBlock='latest')
 
+ # Function to listen for the ExecutionTime event and return the time result
+    def listen_for_execution_time(self):
+        try:
+            while True:
+                # Getting new event entries from the event filter
+                events = self.execution_time_filter.get_all_entries()
+                for event in events:
+                    # Extracting the execution time from the event
+                    execution_time = event['args']['time']
+                    print("Execution time:", execution_time, "seconds")
+                    return execution_time
+
+                # Sleep for a while before checking again
+                time.sleep(2)
+        except KeyboardInterrupt:
+            print("Exiting event listener.")
+            
     #fetching all IPFS links from the Ethereum contract
     def get_all_ipfs_links(self):
         try:
-            #calling the contract wrapper to get all IPFS links for a specififc advert ID (111)
+            #calling the contract wrapper to get all IPFS links for a specififc advert ID (111; 222; 333; etc)
             result = self.contract_wrapper.get_all_ipfs_links(111)
             if result:
                 
@@ -47,7 +74,7 @@ class Oracle:
         data = self.contract_wrapper.read_json_data('ipfs_data.json')
         if data:
             for index, token in enumerate(data.get('tokens', []), start=1):
-                
+                start_time = time.time()  # Start time measurement for each token
                 #extracting token details
                 token_id = token.get('tokenId')
                 ipfs_link = token.get('ipfsLink')
@@ -68,10 +95,45 @@ class Oracle:
                 xml_files = [f"decrypted_file_{index}.xml"]
                 cv_processor = CVProcessor(xml_files, 'ipfs_data.json')
                 total_score = cv_processor.extract_cv_details()
-                
-                #updating token details on the Ethereum contract
-                self.contract_wrapper.process_token(token_id, ipfs_link, second_part, total_score)
+                try:
+                    # Estimate gas cost
+                    gas_estimate = self.contract_wrapper.estimate_gas(token_id, ipfs_link, second_part, total_score)
+                    print(f"Gas estimate for token {token_id}: {gas_estimate}")
 
+                    # Sending the token details to the Ethereum contract
+                    tx_hash = self.contract_wrapper.process_token(token_id, ipfs_link, second_part, total_score, gas=gas_estimate)
+                    receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
+
+                    # Get the block number of the transaction
+                    tx_block_number = receipt['blockNumber']
+
+                    # Get the current block number
+                    current_block_number = self.web3.eth.blockNumber
+
+                    # Calculate the number of confirmations
+                    confirmations = current_block_number - tx_block_number
+
+                    print(f"Transaction for token {token_id} has {confirmations} confirmations.")
+
+                except Exception as e:
+                    print(f"Error processing token {token_id}: {e}")
+                
+                # Delete the decrypted files after processing
+                self.delete_decrypted_files()
+                
+                end_time = time.time()  # End time measurement for each token
+                execution_time = end_time - start_time
+                print(f"Execution time for token {token_id}: {execution_time} seconds")
+                
+    def delete_decrypted_files(self):
+        try:
+            decrypted_files = Path().glob("decrypted_file_*.xml")
+            for file in decrypted_files:
+                file.unlink()
+            print("Decrypted files deleted successfully.")
+        except Exception as e:
+            print("Error deleting decrypted files:", e)
+            
     #evaluating events emitted by the Ethereum contract
     def evaluate(self, event):
         
@@ -125,6 +187,8 @@ class Oracle:
             tx_hash = self.contract_wrapper.update_total_score(ipfs_link, second_part, total_score)
             receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
             print(f"Total score received for the links {ipfs_link} and {second_part} : {total_score}")
+            # Delete the decrypted files after processing
+            self.delete_decrypted_files()
         except Exception as e:
             print(f"Error processing the links {ipfs_link} and {second_part}: {e}")
 
@@ -153,8 +217,8 @@ class Oracle:
 
 if __name__ == "__main__":
     #defining contract address and private key(key taken from Ganache)
-    contract_address = '0xC573299d9c4Dfee429Be2223562C02D758b0438e'
-    private_key = '0x410b11b0bb0a2de4d50b514de0268ebf97bf8f353fb66952296f9c066d028de7'
+    contract_address = '0x10B9409C8D671130D7182004182ddA57e5c9a3e9'
+    private_key = '0x8996bc48f29b9068deaf1f7d6d00c58131cf73f2092db0dc3f34dba041da4d0d'
     
     #initializing the oracle instance
     oracle = Oracle(contract_address, private_key)
@@ -162,3 +226,4 @@ if __name__ == "__main__":
     #fetching all IPFS links and listening for events (for audit purpose)
     oracle.get_all_ipfs_links()
     oracle.listen_for_events()
+    #oracle.listen_for_execution_time()

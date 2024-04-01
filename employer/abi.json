@@ -37,9 +37,28 @@
 				"internalType": "string",
 				"name": "secondPart",
 				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint16",
+				"name": "totalScore",
+				"type": "uint16"
 			}
 		],
 		"name": "DebugTokenInfo",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
+		"name": "ExecutionTime",
 		"type": "event"
 	},
 	{
@@ -65,6 +84,31 @@
 			}
 		],
 		"name": "NFTSubmitted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint32",
+				"name": "advertId",
+				"type": "uint32"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256[]",
+				"name": "tokenIds",
+				"type": "uint256[]"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint16[]",
+				"name": "scores",
+				"type": "uint16[]"
+			}
+		],
+		"name": "TopApplications",
 		"type": "event"
 	},
 	{
@@ -164,35 +208,11 @@
 				"internalType": "string",
 				"name": "ipfsLink2",
 				"type": "string"
-			},
-			{
-				"internalType": "uint16",
-				"name": "totalScore",
-				"type": "uint16"
 			}
 		],
 		"name": "checkTotalScore",
 		"outputs": [],
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"name": "cvBlockNumber",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -228,6 +248,24 @@
 				"internalType": "string",
 				"name": "",
 				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "displayQualifiedApplications",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint16[]",
+				"name": "",
+				"type": "uint16[]"
 			}
 		],
 		"stateMutability": "view",
@@ -287,13 +325,54 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "getAllTokenIds",
+		"inputs": [
+			{
+				"internalType": "uint32",
+				"name": "_advertId",
+				"type": "uint32"
+			}
+		],
+		"name": "getAllSecondParts",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "getApplicationData",
 		"outputs": [
 			{
-				"internalType": "uint256[]",
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "nftTokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "ipfsLink",
+						"type": "string"
+					},
+					{
+						"internalType": "uint16",
+						"name": "totalScore",
+						"type": "uint16"
+					},
+					{
+						"internalType": "uint32",
+						"name": "advertId",
+						"type": "uint32"
+					}
+				],
+				"internalType": "struct Advert.Application",
 				"name": "",
-				"type": "uint256[]"
+				"type": "tuple"
 			}
 		],
 		"stateMutability": "view",
@@ -321,25 +400,25 @@
 	{
 		"inputs": [
 			{
-				"internalType": "bytes32",
-				"name": "_partOneHash",
-				"type": "bytes32"
+				"internalType": "string",
+				"name": "ipfsLink1",
+				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "partOne",
+				"name": "ipfsLink2",
 				"type": "string"
 			}
 		],
-		"name": "getSecondPart",
+		"name": "getScoreForLinkPair",
 		"outputs": [
 			{
-				"internalType": "string",
+				"internalType": "uint16",
 				"name": "",
-				"type": "string"
+				"type": "uint16"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -363,19 +442,32 @@
 				"type": "uint32"
 			}
 		],
-		"name": "getTop5Applications",
+		"name": "getTokenIdsForAdvert",
 		"outputs": [
 			{
-				"internalType": "uint256[5]",
+				"internalType": "uint256[]",
 				"name": "",
-				"type": "uint256[5]"
-			},
-			{
-				"internalType": "uint16[5]",
-				"name": "",
-				"type": "uint16[5]"
+				"type": "uint256[]"
 			}
 		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint32",
+				"name": "_advertId",
+				"type": "uint32"
+			},
+			{
+				"internalType": "uint16",
+				"name": "_threshold",
+				"type": "uint16"
+			}
+		],
+		"name": "getTopApplications",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -414,30 +506,6 @@
 				"internalType": "string",
 				"name": "",
 				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"name": "linkPairToScore",
-		"outputs": [
-			{
-				"internalType": "uint16",
-				"name": "",
-				"type": "uint16"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
 			}
 		],
 		"name": "linkToScore",
@@ -452,7 +520,13 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "uint32",
+				"name": "",
+				"type": "uint32"
+			}
+		],
 		"name": "nftSubmissionEnabled",
 		"outputs": [
 			{
@@ -466,12 +540,63 @@
 	},
 	{
 		"inputs": [],
+		"name": "numAdverts",
+		"outputs": [
+			{
+				"internalType": "uint32",
+				"name": "",
+				"type": "uint32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "owner",
 		"outputs": [
 			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "qualifiedScores",
+		"outputs": [
+			{
+				"internalType": "uint16",
+				"name": "",
+				"type": "uint16"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "qualifiedTokenIds",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -501,6 +626,11 @@
 				"internalType": "uint256",
 				"name": "tokenId",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "ipfsLink1",
+				"type": "string"
 			}
 		],
 		"name": "removeCvApplication",
@@ -528,7 +658,7 @@
 		],
 		"name": "setAdvert",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -565,6 +695,24 @@
 				"type": "uint32"
 			},
 			{
+				"internalType": "bool",
+				"name": "_enabled",
+				"type": "bool"
+			}
+		],
+		"name": "setNFTSubmission",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint32",
+				"name": "_advertId",
+				"type": "uint32"
+			},
+			{
 				"internalType": "string",
 				"name": "_nft",
 				"type": "string"
@@ -573,40 +721,6 @@
 		"name": "submitCvNFT",
 		"outputs": [],
 		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "tokenToApplication",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "nftTokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "ipfsLink",
-				"type": "string"
-			},
-			{
-				"internalType": "uint16",
-				"name": "totalScore",
-				"type": "uint16"
-			},
-			{
-				"internalType": "uint32",
-				"name": "advertId",
-				"type": "uint32"
-			}
-		],
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{

@@ -1,4 +1,6 @@
-#importing necessary libraries and modules
+import time  # Importing the time module
+
+# Importing necessary libraries and modules
 from web3 import Web3
 import json
 
@@ -51,6 +53,8 @@ class ContractWrapper:
     #processing token details on the contract
     def process_token(self, token_id, ipfs_link, second_part, total_score):
         try:
+            start_time = time.time()  # Start time measurement
+            
             #calling contract functions to update token details with total score
             tx_hash = self.contract.functions.receiveTotalScoreForPair(int(token_id), total_score).transact({
                 'from': self.account_address,
@@ -62,9 +66,19 @@ class ContractWrapper:
             })
             receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
             print(f"Total score received for the links {ipfs_link} and {second_part} : {total_score}")
+            
+            end_time = time.time()  # End time measurement
+            execution_time = end_time - start_time
+            print(f"Execution time for processing token {token_id}: {execution_time} seconds")
+            
+            # Estimate gas cost
+            gas_estimate = self.web3.eth.estimateGas({'to': self.contract.address, 'data': tx_hash})
+            print(f"Gas estimate for processing token {token_id}: {gas_estimate}")
+            
         except Exception as e:
             print(f"Error processing the links {ipfs_link} and {second_part}: {e}")
 
     #getting an event filter for monitoring events emitted by the contract
     def get_event_filter(self):
         return self.contract.events.TotalScoreCheck.create_filter(fromBlock='latest')
+    
