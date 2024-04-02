@@ -56,50 +56,68 @@ class Encryption:
         )
 
     def encrypt_cv_data(self, cv_packet_file, symmetric_key_file):
-        
-        # reading CV data
-        cv_data = self.read_cv_data()
-        
-        # generating AES key and IV
-        aes_key = self.generate_aes_key()
-        iv = self.generate_iv()  
-        
-        # encrypting CV data using AES
-        aes_encrypted_cv = self.encrypt_aes(cv_data, aes_key, iv)
-        
-        # reading RSA public key
-        rsa_public_key = self.read_rsa_public_key()
-        
-        # splitting the encrypted key into two parts and encrypting them with RSA
-        encrypted_aes_key_part1 = self.encrypt_with_rsa(aes_key[:16], rsa_public_key)
-        encrypted_aes_key_part2 = self.encrypt_with_rsa(aes_key[16:], rsa_public_key)
+        try:
+            if not os.path.isfile(self.cv_file):
+                print("Error: CV file not found.")
+                exit()
+            if not self.cv_file.endswith('.xml'):
+                print("Error: CV file should be an XML.")
+                exit()
+            if not cv_packet_file.endswith('.json'):
+                print("Error: CV packet file should be a JSON.")
+                exit()
+            if not symmetric_key_file.endswith('.json'):
+                print("Error: Symmetric key file should be a JSON.")
+                exit()
+                
+            # reading CV data
+            cv_data = self.read_cv_data()
+            
+            # generating AES key and IV
+            aes_key = self.generate_aes_key()
+            iv = self.generate_iv()  
+            
+            # encrypting CV data using AES
+            aes_encrypted_cv = self.encrypt_aes(cv_data, aes_key, iv)
+            
+            # reading RSA public key
+            rsa_public_key = self.read_rsa_public_key()
+            
+            # splitting the encrypted key into two parts and encrypting them with RSA
+            encrypted_aes_key_part1 = self.encrypt_with_rsa(aes_key[:16], rsa_public_key)
+            encrypted_aes_key_part2 = self.encrypt_with_rsa(aes_key[16:], rsa_public_key)
 
-        # constructing the CV packet with encrypted header and AES-encrypted CV content
-        cv_packet = {
-            "Header": {
-                "IV": base64.b64encode(iv).decode('utf-8'),
-                "HalfSymmetricKeyEncrypted": base64.b64encode(encrypted_aes_key_part1).decode('utf-8')
-            },
-            "Body": base64.b64encode(aes_encrypted_cv).decode('utf-8')
-        }
+            # constructing the CV packet with encrypted header and AES-encrypted CV content
+            cv_packet = {
+                "Header": {
+                    "IV": base64.b64encode(iv).decode('utf-8'),
+                    "HalfSymmetricKeyEncrypted": base64.b64encode(encrypted_aes_key_part1).decode('utf-8')
+                },
+                "Body": base64.b64encode(aes_encrypted_cv).decode('utf-8')
+            }
 
-        # creating the output folder if it doesn't exist
-        if not os.path.exists(self.output_folder):
-            os.makedirs(self.output_folder)
+            # creating the output folder if it doesn't exist
+            if not os.path.exists(self.output_folder):
+                os.makedirs(self.output_folder)
 
-        # writing the CV packet to the output folder
-        cv_packet_file_path = os.path.join(self.output_folder, cv_packet_file)
-        with open(cv_packet_file_path, "w") as f:
-            json.dump(cv_packet, f)
+            # writing the CV packet to the output folder
+            cv_packet_file_path = os.path.join(self.output_folder, cv_packet_file)
+            with open(cv_packet_file_path, "w") as f:
+                json.dump(cv_packet, f)
 
-        # creating a separate file for the second part of the symmetric key in the output folder
-        symmetric_key_file_path = os.path.join(self.output_folder, symmetric_key_file)
-        with open(symmetric_key_file_path, "w") as f:
-            json.dump({"SymmetricKeyPart2": base64.b64encode(encrypted_aes_key_part2).decode('utf-8')}, f)
+            # creating a separate file for the second part of the symmetric key in the output folder
+            symmetric_key_file_path = os.path.join(self.output_folder, symmetric_key_file)
+            with open(symmetric_key_file_path, "w") as f:
+                json.dump({"SymmetricKeyPart2": base64.b64encode(encrypted_aes_key_part2).decode('utf-8')}, f)
 
-        # printing success messages
-        print("Packet with encrypted header and AES-encrypted CV content has been created successfully!")
-        print("File with the second part of the symmetric key has been created.")
+            # printing success messages
+            print("Packet with encrypted header and AES-encrypted CV content has been created successfully!")
+            print("File with the second part of the symmetric key has been created.")
+            
+        except FileNotFoundError:
+            print("Error: File not found.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     # usage
