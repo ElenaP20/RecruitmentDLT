@@ -1,10 +1,12 @@
 from pathlib import Path
-from Crypto.Cipher import AES, PKCS1_OAEP
-from Crypto.PublicKey import RSA
+from cryptography.hazmat.primitives import padding, hashes
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives.asymmetric import padding as asymmetric_padding
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
+from cryptography.hazmat.backends import default_backend
 import base64
 import json
-
-#from key_value_extractor import KeyValuePairExtractor
 
 # Class for decryption process
 class Decryption:
@@ -21,7 +23,7 @@ class Decryption:
     def load_private_key(self):
         # Load private key from file
         with open(self.private_key_file, 'rb') as f:
-            return RSA.import_key(f.read())
+            return load_pem_private_key(f.read(), password=None, backend=default_backend())
 
     def extract_values_from_json(self, json_file):
         # Extract values from JSON file
@@ -31,9 +33,12 @@ class Decryption:
 
     def decrypt_half_key(self, encrypted_half, private_key):
         # Decrypt half of the symmetric key using RSA
-        cipher_rsa = PKCS1_OAEP.new(private_key)
         try:
-            return cipher_rsa.decrypt(base64.b64decode(encrypted_half))
+            return private_key.decrypt(base64.b64decode(encrypted_half), asymmetric_padding.OAEP(
+                mgf=asymmetric_padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            ))
         except ValueError as e:
             print(f"Error decrypting half key: {e}")
             return None
@@ -44,8 +49,8 @@ class Decryption:
 
     def decrypt_cv(self, symmetric_key, iv, encrypted_cv):
         # Decrypt the CV using AES
-        cipher = AES.new(symmetric_key, AES.MODE_CBC, iv)
-        decrypted_cv = cipher.decrypt(base64.b64decode(encrypted_cv))
+        decryptor = Cipher(algorithms.AES(symmetric_key), modes.CBC(iv), backend=default_backend()).decryptor()
+        decrypted_cv = decryptor.update(base64.b64decode(encrypted_cv)) + decryptor.finalize()
         clean_cv = decrypted_cv.decode('utf-8').replace('\f', '')  # Remove form feed (U+000c)
         return clean_cv 
 
@@ -95,4 +100,3 @@ class Decryption:
         Decryption._downloaded_files.add(file_path.name)
         
         print("Decrypted CV can be found in the following file: ", file_path)
-        
