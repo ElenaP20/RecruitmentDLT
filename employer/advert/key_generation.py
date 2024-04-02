@@ -1,6 +1,8 @@
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 
+#https://github.com/felipevalentin/Crypto-Tools/blob/main/crypto.py
+
 # Generate a 2048-bit RSA key pair
 private_key = rsa.generate_private_key(
     public_exponent=65537,
