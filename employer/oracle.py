@@ -21,7 +21,7 @@ class Oracle:
     def __init__(self, contract_address, private_key):
         
         #initializing Web3 instance with a connection to the local Ethereum node (using Ganache RPC)
-        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7545'))
+        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7547'))
         
         #initializing ContractWrapper instance for interacting with the Ethereum contract
         self.contract_wrapper = ContractWrapper(contract_address, private_key)
@@ -216,14 +216,14 @@ class Oracle:
                 print("Error:", e)
 
 if __name__ == "__main__":
-    #defining contract address and private key(key taken from Ganache)
-    contract_address = '0x10B9409C8D671130D7182004182ddA57e5c9a3e9'
-    private_key = '0x8996bc48f29b9068deaf1f7d6d00c58131cf73f2092db0dc3f34dba041da4d0d'
+    #defining contract address and private key (key taken from Ganache)
+    contract_address = '0x2188033397ab936De4b45D0A12A7399Ee348daD2'
+    private_key = '0x0fca3ffd2092df84ff3a46a77d0cd72039606b312250469cd5fcc6d7ccf93f6f'
     
     #initializing the oracle instance
     oracle = Oracle(contract_address, private_key)
     
     #fetching all IPFS links and listening for events (for audit purpose)
-    oracle.get_all_ipfs_links()
-    oracle.listen_for_events()
-    #oracle.listen_for_execution_time()
+   #oracle.get_all_ipfs_links()
+    #oracle.listen_for_events()
+    oracle.listen_for_execution_time()

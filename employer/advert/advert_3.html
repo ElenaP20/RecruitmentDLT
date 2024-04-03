@@ -27,6 +27,7 @@
                 <salary>$80,000 - $100,000 per year</salary> 
                 <contact_email>email@email.com</contact_email>
                 <applicationDetails>Application details here.</applicationDetails>
+                <threshold>17</threshold>
                 <publicKey> -----BEGIN PUBLIC KEY-----
 
                     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlZL/Ea8l8SqyIoIJ4Qfv
@@ -38,7 +39,7 @@
                     5QIDAQAB
                     
                     -----END PUBLIC KEY-----</publicKey>
-                <escrow>The specified Escrow address is: 0x1aa2374C920ab9fefb07E8Ce3DC9bb7A18283E3d</escrow>
+                <escrow>address (where the contrat is deployed)</escrow>
             </job>`;
 
         const parser2 = new DOMParser();
@@ -61,7 +62,8 @@
             <p><strong>Contact Email:</strong> ${xmlDoc2.querySelector('contact_email').textContent}</p>
             <p><strong>Application Details:</strong> ${xmlDoc2.querySelector('applicationDetails').textContent}</p>
             <p><strong>Public key:</strong> ${xmlDoc2.querySelector('publicKey').textContent}</p>
-            <p><strong>Escrow Address: </strong> ${xmlDoc2.querySelector('escrow').textContent} </p>
+            <p><strong>Example threshold is: </strong> ${xmlDoc2.querySelector('threshold').textContent}</p>
+            <p><strong>Escrow Address is: </strong> ${xmlDoc2.querySelector('escrow').textContent} </p>
         `;
         document.getElementById('job-posting').innerHTML = htmlContent2;
 

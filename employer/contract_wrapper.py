@@ -10,7 +10,7 @@ class ContractWrapper:
     def __init__(self, contract_address, private_key):
         
         #initializing Web3 instance with a connection to the local Ethereum node (using Ganache RPC)
-        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7545'))
+        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7547'))
         
         #initializing Ethereum contract instance with contract address and ABI
         self.contract = self.web3.eth.contract(address=contract_address, abi=self.load_contract_abi())

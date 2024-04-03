@@ -30,6 +30,7 @@
                 <salary>$45,000 - $55,000 per year</salary> 
                 <contact_email>hr@innovativetech.com</contact_email>
                 <applicationDetails>Application details here.</applicationDetails>
+                <threshold>11</threshold>
                 <publicKey> -----BEGIN PUBLIC KEY-----
 
                     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlZL/Ea8l8SqyIoIJ4Qfv
@@ -41,7 +42,7 @@
                     5QIDAQAB
                     
                     -----END PUBLIC KEY-----</publicKey>
-                <escrow> The specified Escrow address is: 0x1aa2374C920ab9fefb07E8Ce3DC9bb7A18283E3d </escrow>
+                <escrow> address (where the contract is deployed)</escrow>
             </job>`;
 
         // Parse the XML data using the DOMParser object
@@ -68,7 +69,8 @@
             <p><strong>Contact Email:</strong> ${xmlDoc.querySelector('contact_email').textContent}</p>
             <p><strong>Application Details:</strong> ${xmlDoc.querySelector('applicationDetails').textContent}</p>
             <p><strong>Public key:</strong> ${xmlDoc.querySelector('publicKey').textContent}</p>
-            <p><strong>Escrow Address: </strong> ${xmlDoc.querySelector('escrow').textContent} </p>
+            <p><strong>Example threshold is: </strong> ${xmlDoc.querySelector('threshold').textContent}</p>
+            <p><strong>Escrow Address is: </strong> ${xmlDoc.querySelector('escrow').textContent} </p>
         `;
 
         // Inject HTML content into the document at the div element with job-posting ID
