@@ -28,26 +28,6 @@ class Oracle:
         
         #initializing FileProcessor instance for file processing
         self.file_processor = FileProcessor()  
-        
-        # Subscribing to the ExecutionTime event
-        self.execution_time_filter = self.contract_wrapper.contract.events.ExecutionTime.create_filter(fromBlock='latest')
-
- # Function to listen for the ExecutionTime event and return the time result
-    def listen_for_execution_time(self):
-        try:
-            while True:
-                # Getting new event entries from the event filter
-                events = self.execution_time_filter.get_all_entries()
-                for event in events:
-                    # Extracting the execution time from the event
-                    execution_time = event['args']['time']
-                    print("Execution time:", execution_time, "seconds")
-                    return execution_time
-
-                # Sleep for a while before checking again
-                time.sleep(2)
-        except KeyboardInterrupt:
-            print("Exiting event listener.")
             
     #fetching all IPFS links from the Ethereum contract
     def get_all_ipfs_links(self):
@@ -224,6 +204,5 @@ if __name__ == "__main__":
     oracle = Oracle(contract_address, private_key)
     
     #fetching all IPFS links and listening for events (for audit purpose)
-   #oracle.get_all_ipfs_links()
-    #oracle.listen_for_events()
-    oracle.listen_for_execution_time()
+    oracle.get_all_ipfs_links()
+    oracle.listen_for_events()

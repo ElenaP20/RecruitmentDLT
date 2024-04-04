@@ -26,11 +26,32 @@
         <requirements>
             <item>Previous experience in marketing or related field.</item>
             <item>Strong written and verbal communication skills.</item>
+            <item>High school diploma </item>
         </requirements>  
         <salary>$25 - $30 per hour</salary> 
         <contact_email>careers@marketingsolutions.com</contact_email>
         <applicationDetails>Application details here.</applicationDetails>
-        <threshold>12</threshold>
+        <criteria>
+            <education>
+                <item>Primary Education: 0 </item>
+                <item>High School Diploma: 5</item>
+                <item>Associate Degree: 7</item>
+                <item>Bachelor's Degree: 10</item>
+                <item>Master's Degree: 15 points</item>
+                <item>Doctorate or Ph.D.: 20 points</item>
+            </education>
+            <experience>
+                <item>0-2 years: 5 points</item>
+                <item>3-5 years: 10 points</item>
+                <item>6-8 years: 15 points</item>
+                <item>9+ years: 20 points</item>
+            </experience>
+            <right-to-work>
+                <item>Having the right to work: 1 point</item>
+                <item>Not having the right to work: 0 points</item>
+            </right-to-work>
+        </criteria> 
+        <threshold>10</threshold>
         <publicKey> -----BEGIN PUBLIC KEY-----
 
             MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlZL/Ea8l8SqyIoIJ4Qfv
@@ -68,9 +89,30 @@
             <p><strong>Salary:</strong> ${xmlDoc.querySelector('salary').textContent}</p>
             <p><strong>Contact Email:</strong> ${xmlDoc.querySelector('contact_email').textContent}</p>
             <p><strong>Application Details:</strong> ${xmlDoc.querySelector('applicationDetails').textContent}</p>
-            <p><strong>Public key:</strong> ${xmlDoc.querySelector('publicKey').textContent}</p>
+            <h2>Shortlisting Criteria:</h2>
+            <div class="criteria-container">
+                <div class="criteria-group">
+                    <h3>Education Level Points:</h3>
+                    <ul>
+                        ${Array.from(xmlDoc.querySelectorAll('criteria education item')).map(item => `<li>${item.textContent}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="criteria-group">
+                    <h3>Years of Experience Points:</h3>
+                    <ul>
+                        ${Array.from(xmlDoc.querySelectorAll('criteria experience item')).map(item => `<li>${item.textContent}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="criteria-group">
+                    <h3>Right to Work Points:</h3>
+                    <ul>
+                        ${Array.from(xmlDoc.querySelectorAll('criteria right-to-work item')).map(item => `<li>${item.textContent}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
             <p><strong>Example threshold is: </strong> ${xmlDoc.querySelector('threshold').textContent}</p>
             <p><strong>Escrow Address is: </strong> ${xmlDoc.querySelector('escrow').textContent} </p>
+            <p><strong>Public key:</strong> ${xmlDoc.querySelector('publicKey').textContent}</p>
         `;
 
         // Inject HTML content into the document at the div element with job-posting ID

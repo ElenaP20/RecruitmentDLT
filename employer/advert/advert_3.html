@@ -10,37 +10,59 @@
     <button id="download-public-key">Download Public Key</button>
     <script>
         const xmlData2 = `<?xml version="1.0" encoding="UTF-8"?>
-            <job>
-                <title>Software Engineer</title>
-                <company>Tech Innovations Ltd.</company>
-                <location>San Francisco, CA</location>
-                <type>Full-time</type>  
-                <description>We are looking for a skilled Software Engineer to join our team. The ideal candidate will have experience in developing scalable web applications and a strong understanding of modern technologies.</description>
-                <responsibilities>
-                    <item>Design, develop, and maintain software applications.</item>
-                    <item>Collaborate with cross-functional teams to define, design, and ship new features.</item>
-                </responsibilities>
-                <requirements>
-                    <item>Bachelor's degree in Computer Science or related field.</item>
-                    <item>Proficiency in JavaScript, HTML, and CSS.</item>
-                </requirements>  
-                <salary>$80,000 - $100,000 per year</salary> 
-                <contact_email>email@email.com</contact_email>
-                <applicationDetails>Application details here.</applicationDetails>
-                <threshold>17</threshold>
-                <publicKey> -----BEGIN PUBLIC KEY-----
+        <job>
+            <title>Researcher</title>
+            <company>Research Innovations Inc.</company>
+            <location>Los Angeles, CA</location>
+            <type>Full-time</type>  
+            <description>We are seeking a skilled Researcher to join our team. The ideal candidate will have experience in conducting research, analyzing data, and presenting findings.</description>
+            <responsibilities>
+                <item>Conduct research in specified areas.</item>
+                <item>Analyze data and present findings.</item>
+            </responsibilities>
+            <requirements>
+                <item>Doctorate or Ph.D. in a related field.</item>
+                <item>Strong analytical and research skills.</item>
+                <item> Right to work </item>
+                <item> Work experience in related fields</item>
+            </requirements>  
+            <criteria>
+                <education>
+                    <item>Primary Education: 0 </item>
+                    <item>High School Diploma: 5</item>
+                    <item>Associate Degree: 7</item>
+                    <item>Bachelor's Degree: 10</item>
+                    <item>Master's Degree: 15 points</item>
+                    <item>Doctorate or Ph.D.: 20 points</item>
+                </education>
+                <experience>
+                    <item>0-2 years: 5 points</item>
+                    <item>3-5 years: 10 points</item>
+                    <item>6-8 years: 15 points</item>
+                    <item>9+ years: 20 points</item>
+                </experience>
+                <right-to-work>
+                    <item>Having the right to work: 1 point</item>
+                    <item>Not having the right to work: 0 points</item>
+                </right-to-work>
+            </criteria> 
+            <salary>$70,000 - $90,000 per year</salary> 
+            <contact_email>email@email.com</contact_email>
+            <applicationDetails>Application details here.</applicationDetails>
+            <threshold>26</threshold>
+            <publicKey> -----BEGIN PUBLIC KEY-----
 
-                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlZL/Ea8l8SqyIoIJ4Qfv
-                    PtoKI1rM/dC9B7TrVi2c24TMN40X6SsvwWJPFvlq/IA+FZZHgjIFmNygJJKCthFR
-                    n5uYuhApze+MKeRJu16imqNI9KKO2DWWMFEzppBpHDiK3u+AJtlAprKP1swLu2AW
-                    zhsgoTsE5xiweO9WqhbDD0fhRH2FtHmaSuIk2u6NI3OUze8qnYfqBot3G1QU87XN
-                    O1S55OmO7VNw8lS1mnEmkJiB6ReUbU6tZJ5d9vL38vhnuqYg3Ue4QAydfRaGuo0v
-                    287zDyv3N8voAP0NslCG5/vj8vnZLBRTteiBLNl8bmsmbVxsZpB7gNqbX3OvH6oL
-                    5QIDAQAB
-                    
-                    -----END PUBLIC KEY-----</publicKey>
-                <escrow>address (where the contrat is deployed)</escrow>
-            </job>`;
+                MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlZL/Ea8l8SqyIoIJ4Qfv
+                PtoKI1rM/dC9B7TrVi2c24TMN40X6SsvwWJPFvlq/IA+FZZHgjIFmNygJJKCthFR
+                n5uYuhApze+MKeRJu16imqNI9KKO2DWWMFEzppBpHDiK3u+AJtlAprKP1swLu2AW
+                zhsgoTsE5xiweO9WqhbDD0fhRH2FtHmaSuIk2u6NI3OUze8qnYfqBot3G1QU87XN
+                O1S55OmO7VNw8lS1mnEmkJiB6ReUbU6tZJ5d9vL38vhnuqYg3Ue4QAydfRaGuo0v
+                287zDyv3N8voAP0NslCG5/vj8vnZLBRTteiBLNl8bmsmbVxsZpB7gNqbX3OvH6oL
+                5QIDAQAB
+                
+                -----END PUBLIC KEY-----</publicKey>
+            <escrow>address (where the contract is deployed)</escrow>
+        </job>`;
 
         const parser2 = new DOMParser();
         const xmlDoc2 = parser2.parseFromString(xmlData2, "text/xml");
@@ -61,9 +83,30 @@
             <p><strong>Salary:</strong> ${xmlDoc2.querySelector('salary').textContent}</p>
             <p><strong>Contact Email:</strong> ${xmlDoc2.querySelector('contact_email').textContent}</p>
             <p><strong>Application Details:</strong> ${xmlDoc2.querySelector('applicationDetails').textContent}</p>
-            <p><strong>Public key:</strong> ${xmlDoc2.querySelector('publicKey').textContent}</p>
+            <h2>Shortlisting Criteria:</h2>
+            <div class="criteria-container">
+                <div class="criteria-group">
+                    <h3>Education Level Points:</h3>
+                    <ul>
+                        ${Array.from(xmlDoc2.querySelectorAll('criteria education item')).map(item => `<li>${item.textContent}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="criteria-group">
+                    <h3>Years of Experience Points:</h3>
+                    <ul>
+                        ${Array.from(xmlDoc2.querySelectorAll('criteria experience item')).map(item => `<li>${item.textContent}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="criteria-group">
+                    <h3>Right to Work Points:</h3>
+                    <ul>
+                        ${Array.from(xmlDoc2.querySelectorAll('criteria right-to-work item')).map(item => `<li>${item.textContent}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
             <p><strong>Example threshold is: </strong> ${xmlDoc2.querySelector('threshold').textContent}</p>
             <p><strong>Escrow Address is: </strong> ${xmlDoc2.querySelector('escrow').textContent} </p>
+            <p><strong>Public key:</strong> ${xmlDoc2.querySelector('publicKey').textContent}</p>
         `;
         document.getElementById('job-posting').innerHTML = htmlContent2;
 
