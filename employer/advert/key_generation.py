@@ -5,7 +5,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 
 # Generate a 2048-bit RSA key pair
 private_key = rsa.generate_private_key(
-    public_exponent=65537,
+    public_exponent=65537, 
     key_size=2048
 )
 
@@ -24,7 +24,7 @@ print("Private key stored in private_key.pem")
 # Extract the public key
 public_key = private_key.public_key()
 
-# Serialize the public key to PEM format
+# Serialize the public key to PEM format- bytes to base64
 public_key_pem = public_key.public_bytes(
     encoding=serialization.Encoding.PEM,
     format=serialization.PublicFormat.SubjectPublicKeyInfo
