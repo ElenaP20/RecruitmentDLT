@@ -123,12 +123,14 @@ if __name__ == "__main__":
     # usage
     # user entering the CV file path, CV packet file name, and symmetric key file name
     cv_file = input("Enter the path to your CV file: ")
+    public_key_file = input("Enter the name of the file containing employer's public key: ")
+    output_folder = input("Enter the name of the folder where the CV packets should be stored: ")
     cv_packet_file = input("Enter the name for the CV packet JSON file: ")
     symmetric_key_file = input("Enter the name for the symmetric key JSON file: ")
     
     # specifying the public key file and output folder
-    public_key_file = "public_key.pem"
-    output_folder = "encrypted_CVs"
+    #public_key_file = "public_key.pem"
+    #output_folder = "encrypted_CVs"
 
     # encrypting the CV data and generate CV packet and symmetric key files
     encryptor = Encryption(cv_file, public_key_file, output_folder)
