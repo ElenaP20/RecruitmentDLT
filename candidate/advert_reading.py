@@ -16,18 +16,14 @@ class ReadAdvert:
             try:
                 #downloading the file with the given content ID
                 file_path, _ = ipfs_handler.get_file(content_id)
-                
-                #setting a name for the downloaded file
+
                 file_path_html = input("Enter a file name for the job advert (in HTML format): ")
                 file_path.rename(file_path_html)
-                
-                #successful download
                 print(f"File downloaded at: {file_path_html}") 
             
             #error handling for no gateway available
             except NoGatewayAvailable as e:
                 print("No gateway available:", e)
-                #returning the content ID
             return content_id
         
         #error handling for no file found
