@@ -59,7 +59,7 @@ class CVProcessor:
                     education_levels.append(degree)
 
                 highest_education_level = None
-                education_order = ['Ph.D.', 'Master', 'Bachelor', 'Associate', 'High School', 'Primary']
+                education_order = ['Doctorate','Ph.D.' 'Master', 'Bachelor', 'Associate', 'High School', 'Primary']
                 for edu_level in education_order:
                     if any(edu_level.lower() in level.lower() for level in education_levels):
                         highest_education_level = edu_level

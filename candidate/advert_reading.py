@@ -3,9 +3,9 @@ import sys
 from pathlib import Path
 
 #adding the parent directory of the current directory to the Python path
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+sys.path.append(str(Path(__file__).resolve().parent))
 
-from employer.ipfs_handler import IpfsHandle, NoGatewayAvailable
+from ipfs_handler import IpfsHandle, NoGatewayAvailable
 
 class ReadAdvert:
     def read_advert_data(self):
