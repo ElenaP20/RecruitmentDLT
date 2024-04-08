@@ -5,7 +5,7 @@
         <email> email@example.com </email>
         <phone> 123-123-123 </phone>
     </personal_info>
-    <right_to_work> Yes </right_to_work>
+    <right_to_work>No</right_to_work>
     <education>
         <institution> University Name </institution>
         <degree> Master of Science </degree>
@@ -23,9 +23,6 @@
         <position> Position </position>
         <dates> 2020-2022 </dates>
         <description> List of responsibilities and achievements </description>
-        <company_name> Company Name </company_name>
-        <position> Position </position>
-        <dates> 2019-2020 </dates>
     </experience>
     <skills>
         <skill> Python </skill>

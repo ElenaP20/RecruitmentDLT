@@ -22,9 +22,9 @@ class CVProcessor:
         return education_level_score, years_exp, 1 if right_to_work else 0
 
     # Calculate total score based on education level, years of experience, and right to work
-    def calculate_score(self, education_level, years_exp, right_to_work):
-        score = education_level + years_exp + right_to_work
-        return score
+    def calculate_score(self, education_level_score, experience_points, right_to_work_score):
+        total_score = education_level_score + experience_points + right_to_work_score
+        return total_score
 
     # Get score based on education level
     def get_education_level_score(self, education_level):
@@ -51,7 +51,8 @@ class CVProcessor:
                 tree = ET.parse(xml_file)
                 root = tree.getroot()
 
-                right_to_work = root.find('right_to_work').text
+                right_to_work = root.find('right_to_work').text.strip()
+                print(right_to_work)
 
                 education_levels = []
                 for education_item in root.findall('education'):
@@ -59,7 +60,7 @@ class CVProcessor:
                     education_levels.append(degree)
 
                 highest_education_level = None
-                education_order = ['Doctorate','Ph.D.' 'Master', 'Bachelor', 'Associate', 'High School', 'Primary']
+                education_order = ['Doctorate','Ph.D.', 'Master', 'Bachelor', 'Associate', 'High School', 'Primary']
                 for edu_level in education_order:
                     if any(edu_level.lower() in level.lower() for level in education_levels):
                         highest_education_level = edu_level
@@ -84,7 +85,7 @@ class CVProcessor:
                     experience_points = 20
 
                 # Evaluate criteria
-                education_level_score, years_exp, right_to_work_score = self.evaluate_criteria(
+                education_level_score, years_of_experience, right_to_work_score = self.evaluate_criteria(
                     highest_education_level, years_of_experience, right_to_work == "Yes"
                 )
 
