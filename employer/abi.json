@@ -214,6 +214,11 @@
 	{
 		"inputs": [
 			{
+				"internalType": "uint32",
+				"name": "_advertId",
+				"type": "uint32"
+			},
+			{
 				"internalType": "uint256",
 				"name": "_tokenId",
 				"type": "uint256"
@@ -245,25 +250,6 @@
 		"name": "closeSubmission",
 		"outputs": [],
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"name": "cvHash",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -637,6 +623,24 @@
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "ipfsLink1",
+				"type": "string"
+			}
+		],
+		"name": "removeCvApplication",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint32",
 				"name": "_advertId",
 				"type": "uint32"
@@ -679,24 +683,6 @@
 			}
 		],
 		"name": "setNFTContract",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint32",
-				"name": "_advertId",
-				"type": "uint32"
-			},
-			{
-				"internalType": "bool",
-				"name": "_enabled",
-				"type": "bool"
-			}
-		],
-		"name": "setNFTSubmission",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

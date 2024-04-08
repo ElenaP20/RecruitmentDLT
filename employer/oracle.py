@@ -197,12 +197,12 @@ class Oracle:
 
 if __name__ == "__main__":
     #defining contract address and private key (key taken from Ganache)
-    contract_address = '0x2188033397ab936De4b45D0A12A7399Ee348daD2'
-    private_key = '0x0fca3ffd2092df84ff3a46a77d0cd72039606b312250469cd5fcc6d7ccf93f6f'
+    contract_address = '0x8164C71ee2007299344216398b8f1F0E5387449b'
+    private_key = '0x0e364996eb3e1314c3f11e981beb23d3ee6dc1a75885a35c3c479a69dc77bc04'
     
     #initializing the oracle instance
     oracle = Oracle(contract_address, private_key)
     
     #fetching all IPFS links and listening for events (for audit purpose)
     oracle.get_all_ipfs_links()
-    oracle.listen_for_events()
+    #oracle.listen_for_events()
