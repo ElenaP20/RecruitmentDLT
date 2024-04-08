@@ -65,14 +65,35 @@ class CVProcessor:
                     if any(edu_level.lower() in level.lower() for level in education_levels):
                         highest_education_level = edu_level
                         break
+                    
+                years_of_experience=0
+                # Find all date ranges directly using XPath
+                date_ranges = root.findall('.//experience/dates')
 
-                years_of_experience = 0
-                for experience_item in root.findall('experience'):
-                    dates = experience_item.find('dates').text
+                # Print date_ranges to check if they are extracted correctly
+                print("Number of date_ranges found:", len(date_ranges))
+                for dates_element in date_ranges:
+                    dates = dates_element.text.strip()
+                    print("Dates:", dates)  # Print dates for debugging
                     start_year, end_year = map(str.strip, dates.split('-'))
-                    if end_year.lower() == 'present':
-                        end_year = str(2024)  # Assuming 2024 as the current year
-                    years_of_experience += (int(end_year) - int(start_year) + 1)
+
+                    # Adjust for 'Present' or unspecified end dates
+                    if end_year.lower() == 'present' or dates.endswith('-'):
+                        experience_duration = 1
+                    else:
+                        # Convert start and end years to integers
+                        start_year = int(start_year)
+                        end_year = int(end_year)
+
+                        # Calculate the duration of the experience in years
+                        experience_duration = end_year - start_year + 1
+
+                    # Add the calculated duration to the total years of experience
+                    years_of_experience += experience_duration
+
+                # Print the total years of experience
+                print("Total Years of Experience:", years_of_experience)
+
 
                 # Assign points based on ranges of years of experience
                 if years_of_experience >= 0 and years_of_experience <= 2:
@@ -88,6 +109,7 @@ class CVProcessor:
                 education_level_score, years_of_experience, right_to_work_score = self.evaluate_criteria(
                     highest_education_level, years_of_experience, right_to_work == "Yes"
                 )
+                print(years_of_experience,experience_points, right_to_work_score, education_level_score)
 
                 # Calculate total score
                 total_score = self.calculate_score(education_level_score, experience_points, right_to_work_score)
