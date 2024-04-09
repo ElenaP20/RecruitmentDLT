@@ -25,7 +25,7 @@ class Oracle:
     def __init__(self, contract_address, private_key):
         
         # Initializing Web3 instance with a connection to the local Ethereum node (using Ganache RPC)
-        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7543'))
+        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7542'))
         
         # Initializing ContractWrapper instance for interacting with the Ethereum contract
         self.contract_wrapper = ContractWrapper(contract_address, private_key)
@@ -38,7 +38,7 @@ class Oracle:
     def get_all_ipfs_links(self):
         try:
             # getting all IPFS links for a specific advert ID (111; 222; 333)
-            result = self.contract_wrapper.fetch_links(444)
+            result = self.contract_wrapper.fetch_links(111)
             if result:
                 
                 # Writing IPFS links to a JSON file
@@ -228,13 +228,13 @@ class Oracle:
 
 if __name__ == "__main__":
     #defining contract address and private key (key taken from Ganache)
-    contract_address = '0x8e782fDf7A520706bAa6438561ebA947940ad6D6'
-    private_key = '0xe1afa99b2cbc7cc576263240068edf43e572f42d6a9d96bd62a6d37608851762'
+    contract_address = '0x79E5e3A5E9F35724dc2eBa917A2312C6b8050691'
+    private_key = '0xa5b94567be428698d8b6e622feed9c79e1770d6100179b707d810bbd8d87abf8'
     
     #initializing the oracle instance
     oracle = Oracle(contract_address, private_key)
     #print("Current address:", oracle.web3.eth.accounts[0])
     
     #fetching all IPFS links and listening for events (for audit purpose)
-    #oracle.get_all_ipfs_links()
-    oracle.listen_for_events()
+    oracle.get_all_ipfs_links()
+    #oracle.listen_for_events()
