@@ -76,17 +76,18 @@ class CVProcessor:
                     dates = dates_element.text.strip()
                     print("Dates:", dates)  # Print dates for debugging
                     start_year, end_year = map(str.strip, dates.split('-'))
-
                     # Adjust for 'Present' or unspecified end dates
                     if end_year.lower() == 'present' or dates.endswith('-'):
-                        experience_duration = 1
+                        end_year = 2024 
+                        start_year = int(start_year)  
+                        experience_duration = end_year - start_year
                     else:
-                        # Convert start and end years to integers
-                        start_year = int(start_year)
-                        end_year = int(end_year)
+                        start_year = int(start_year)  
+                        end_year = int(end_year) 
+                        #start_year, end_year = map(int, map(str.strip, dates.split('-')))  
 
                         # Calculate the duration of the experience in years
-                        experience_duration = end_year - start_year + 1
+                        experience_duration = end_year - start_year
 
                     # Add the calculated duration to the total years of experience
                     years_of_experience += experience_duration

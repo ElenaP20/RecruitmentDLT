@@ -9,7 +9,7 @@ class ContractWrapper:
     def __init__(self, contract_address, private_key):
         
         # Initializing Web3 instance with a connection to the local Ethereum node (using Ganache RPC)
-        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7544'))
+        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7543'))
         
         # Initializing Ethereum contract instance with contract address and ABI
         self.contract = self.web3.eth.contract(address=contract_address, abi=self.load_contract_abi())
@@ -25,13 +25,17 @@ class ContractWrapper:
     # Fetching all IPFS links associated with a token ID from the contract
     def fetch_links(self, token_id):
         try:
-            # Calling the contract function to get all IPFS links for the given token ID
-            result = self.contract.functions.getAllIPFSLinks(token_id).call()
+            # Fetching the current address
+            current_address = self.web3.eth.accounts[0]  # Assuming the first account is the desired sender 
+
+            # Calling the contract function with 'from' parameter
+            result = self.contract.functions.getAllIPFSLinks(token_id).call({'from': current_address})
+
             token_ids = list(map(str, result[0]))
             ipfs_links = result[1]
             second_parts = result[2]
             data = {'tokens': []}
-            
+
             # Iterating through the retrieved data and constructing a dictionary
             for token_id, ipfs_link, second_part in zip(token_ids, ipfs_links, second_parts):
                 if ipfs_link != "" and second_part != "":

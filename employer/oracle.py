@@ -25,7 +25,7 @@ class Oracle:
     def __init__(self, contract_address, private_key):
         
         # Initializing Web3 instance with a connection to the local Ethereum node (using Ganache RPC)
-        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7544'))
+        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7543'))
         
         # Initializing ContractWrapper instance for interacting with the Ethereum contract
         self.contract_wrapper = ContractWrapper(contract_address, private_key)
@@ -37,7 +37,7 @@ class Oracle:
     # Fetching all IPFS links from the Ethereum contract
     def get_all_ipfs_links(self):
         try:
-            # Calling the contract wrapper to get all IPFS links for a specific advert ID (111; 222; 333; etc)
+            # getting all IPFS links for a specific advert ID (111; 222; 333)
             result = self.contract_wrapper.fetch_links(444)
             if result:
                 
@@ -54,61 +54,85 @@ class Oracle:
 
     # Processing tokens fetched from the Ethereum contract
     def process_tokens(self):
-        
-        # Reading data from the JSON file containing IPFS links
-        data = self.contract_wrapper.read_json_data('ipfs_data.json')
-        if data:
-            for index, token in enumerate(data.get('tokens', []), start=1):
-                start_time = time.time()  # Start time measurement for each token
-                # Extracting token details
-                token_id = token.get('tokenId')
-                ipfs_link = token.get('ipfsLink')
-                second_part = token.get('secondPart')
-                
-                # Initializing IpfsHandle instance for handling IPFS interactions
-                handler = IpfsHandle()
-                
-                # Downloading files from IPFS
-                downloaded_file_path1, _ = handler.get_file(ipfs_link)
-                downloaded_file_path2, _ = handler.get_file(second_part)
-                self.files_to_delete.append(downloaded_file_path1)
-                self.files_to_delete.append(downloaded_file_path2)
-                
-                # Initializing Decryption instance for decrypting files
-                decryption = Decryption(downloaded_file_path1, downloaded_file_path2, "private_key.pem", self.file_processor) 
-                decryption.process()
-                
-                # Processing decrypted files
-                xml_files = [f"decrypted_file_{index}.xml"]
-                cv_processor = CVProcessor(xml_files, 'ipfs_data.json')
-                total_score = cv_processor.extract_cv_details()
-                try:
-                    # Sending the token details to the Ethereum contract and returning the transaction hash
-                    tx_hash = self.contract_wrapper.send_score(
-                        token_id, ipfs_link, second_part, total_score
-                    )
-                except Exception as e:
-                    print(f"Error processing token {token_id}: {e}")
-                        
-                # Delete the downloaded and decrypted files after processing
-                self.delete_files()                
-                
-                end_time = time.time()  # End time measurement for each token
-                execution_time = end_time - start_time
-                print(f"Execution time for token {token_id}: {execution_time} seconds")
-                print(f"Evaluation completed for token {token_id}!")
-                
+        try:
+            # Reading data from the JSON file containing IPFS links
+            data = self.contract_wrapper.read_json_data('ipfs_data.json')
+            if data:
+                xml_files_list = []
+                for index, token in enumerate(data.get('tokens', []), start=1):
+                    start_time = time.time()  # Start time measurement for each token
+                    # Extracting token details
+                    token_id = token.get('tokenId')
+                    ipfs_link = token.get('ipfsLink')
+                    second_part = token.get('secondPart')
+                    
+                    # Initializing IpfsHandle instance for handling IPFS interactions
+                    handler = IpfsHandle()
+                    
+                    # Downloading files from IPFS
+                    downloaded_file_path1, _ = handler.get_file(ipfs_link)
+                    downloaded_file_path2, _ = handler.get_file(second_part)
+                    self.files_to_delete.append(downloaded_file_path1)
+                    self.files_to_delete.append(downloaded_file_path2)
+                    
+                    # Initializing Decryption instance for decrypting files
+                    decryption = Decryption(downloaded_file_path1, downloaded_file_path2, "private_key.pem", self.file_processor) 
+                    decryption.process()
+                    
+                    # Processing decrypted files
+                    xml_files = f"decrypted_file_{index}.xml"
+                    xml_files_list.append(xml_files)
+                    cv_processor = CVProcessor([xml_files], 'ipfs_data.json')
+                    total_score = cv_processor.extract_cv_details()
+                    try:
+                        # Sending the token details to the Ethereum contract and returning the transaction hash
+                        tx_hash = self.contract_wrapper.send_score(
+                            token_id, ipfs_link, second_part, total_score
+                        )
+                    except Exception as e:
+                        print(f"Error processing token {token_id}: {e}")
+                            
+                    # Delete the downloaded and decrypted files after processing
+                    self.files_to_delete.extend(xml_files_list)
+                    self.delete_files()                
+                    
+                    end_time = time.time()  # End time measurement for each token
+                    execution_time = end_time - start_time
+                    print(f"Execution time for token {token_id}: {execution_time} seconds")
+                    print(f"Evaluation completed for token {token_id}!")
+                    
+            self.empty_ipfs_data_file()
+            # Print completion message
+            print("All tokens processed successfully and data files removed.")
+        except Exception as e:
+            print("Error processing tokens:", e)
+                    
     def delete_files(self):
         try:
             for file_path in self.files_to_delete:
-                Path(file_path).unlink()
-            decrypted_files = Path().glob("decrypted_file_*.xml")
-            for file in decrypted_files:
-                file.unlink()
+                if isinstance(file_path, list):  # Check if file_path is a list
+                    for file in file_path:
+                        if Path(file).exists():
+                            Path(file).unlink()
+                else:
+                    if Path(file_path).exists():
+                        Path(file_path).unlink()
+            
             print("All files deleted successfully.")
         except Exception as e:
             print("Error deleting files:", e)
+    
+    def empty_ipfs_data_file(self):
+        try:
+            # Open the ipfs_data.json file in write mode and write an empty JSON object
+            with open('ipfs_data.json', 'w') as json_file:
+                json.dump({}, json_file)
             
+            print("ipfs_data.json file emptied successfully.")
+            
+        except Exception as e:
+            print("Error emptying ipfs_data.json file:", e)
+                    
     # Evaluating events emitted by the Ethereum contract
     def audit(self, event):
         
@@ -159,8 +183,9 @@ class Oracle:
             )
         except Exception as e:
             print(f"Error processing token {token_id}: {e}")
-            
-        self.delete_files()  
+              
+        self.files_to_delete.extend(xml_files)
+        self.delete_files() 
         print(f"Evaluation completed for token {token_id}!")
 
     # Listening for events emitted by the Ethereum contract
@@ -188,11 +213,12 @@ class Oracle:
 
 if __name__ == "__main__":
     #defining contract address and private key (key taken from Ganache)
-    contract_address = '0xFa6b3cce0Eb560Dc0f5506Ddc8BB7B05946A11E9'
-    private_key = '0x5490e8b5f9bf8179ee955c7edb5811708b3d7676b7953874ea9b111108370053'
+    contract_address = '0x8e782fDf7A520706bAa6438561ebA947940ad6D6'
+    private_key = '0xe1afa99b2cbc7cc576263240068edf43e572f42d6a9d96bd62a6d37608851762'
     
     #initializing the oracle instance
     oracle = Oracle(contract_address, private_key)
+    print("Current address:", oracle.web3.eth.accounts[0])
     
     #fetching all IPFS links and listening for events (for audit purpose)
     oracle.get_all_ipfs_links()
