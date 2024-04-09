@@ -103,7 +103,7 @@ class Oracle:
                     
             self.empty_ipfs_data_file()
             # Print completion message
-            print("All tokens processed successfully and data files removed.")
+            print("All tokens processed successfully.")
         except Exception as e:
             print("Error processing tokens:", e)
                     
@@ -118,7 +118,7 @@ class Oracle:
                     if Path(file_path).exists():
                         Path(file_path).unlink()
             
-            print("All files deleted successfully.")
+            #print("All files deleted successfully.")
         except Exception as e:
             print("Error deleting files:", e)
     
@@ -128,7 +128,7 @@ class Oracle:
             with open('ipfs_data.json', 'w') as json_file:
                 json.dump({}, json_file)
             
-            print("ipfs_data.json file emptied successfully.")
+            #print("ipfs_data.json file emptied successfully.")
             
         except Exception as e:
             print("Error emptying ipfs_data.json file:", e)
@@ -218,7 +218,7 @@ if __name__ == "__main__":
     
     #initializing the oracle instance
     oracle = Oracle(contract_address, private_key)
-    print("Current address:", oracle.web3.eth.accounts[0])
+    #print("Current address:", oracle.web3.eth.accounts[0])
     
     #fetching all IPFS links and listening for events (for audit purpose)
     oracle.get_all_ipfs_links()

@@ -74,7 +74,7 @@ class CVProcessor:
                 print("Number of date_ranges found:", len(date_ranges))
                 for dates_element in date_ranges:
                     dates = dates_element.text.strip()
-                    print("Dates:", dates)  # Print dates for debugging
+                    #print("Dates:", dates)  # Print dates for debugging
                     start_year, end_year = map(str.strip, dates.split('-'))
                     # Adjust for 'Present' or unspecified end dates
                     if end_year.lower() == 'present' or dates.endswith('-'):
@@ -92,9 +92,7 @@ class CVProcessor:
                     # Add the calculated duration to the total years of experience
                     years_of_experience += experience_duration
 
-                # Print the total years of experience
-                print("Total Years of Experience:", years_of_experience)
-
+                #print("Total Years of Experience:", years_of_experience)
 
                 # Assign points based on ranges of years of experience
                 if years_of_experience >= 0 and years_of_experience <= 2:
@@ -110,7 +108,6 @@ class CVProcessor:
                 education_level_score, years_of_experience, right_to_work_score = self.evaluate_criteria(
                     highest_education_level, years_of_experience, right_to_work == "Yes"
                 )
-                print(years_of_experience,experience_points, right_to_work_score, education_level_score)
 
                 # Calculate total score
                 total_score = self.calculate_score(education_level_score, experience_points, right_to_work_score)
