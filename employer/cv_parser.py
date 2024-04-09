@@ -52,7 +52,7 @@ class CVProcessor:
                 root = tree.getroot()
 
                 right_to_work = root.find('right_to_work').text.strip()
-                print(right_to_work)
+                #print(right_to_work)
 
                 education_levels = []
                 for education_item in root.findall('education'):
@@ -70,8 +70,7 @@ class CVProcessor:
                 # Find all date ranges directly using XPath
                 date_ranges = root.findall('.//experience/dates')
 
-                # Print date_ranges to check if they are extracted correctly
-                print("Number of date_ranges found:", len(date_ranges))
+                #print("Number of date_ranges found:", len(date_ranges))
                 for dates_element in date_ranges:
                     dates = dates_element.text.strip()
                     #print("Dates:", dates)  # Print dates for debugging

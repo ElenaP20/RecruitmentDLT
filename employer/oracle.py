@@ -101,7 +101,7 @@ class Oracle:
                     print(f"Execution time for token {token_id}: {execution_time} seconds")
                     print(f"Evaluation completed for token {token_id}!")
                     
-            self.empty_ipfs_data_file()
+            self.empty_data_file()
             # Print completion message
             print("All tokens processed successfully.")
         except Exception as e:
@@ -122,17 +122,31 @@ class Oracle:
         except Exception as e:
             print("Error deleting files:", e)
     
-    def empty_ipfs_data_file(self):
+    def empty_data_file(self):
         try:
-            # Open the ipfs_data.json file in write mode and write an empty JSON object
-            with open('ipfs_data.json', 'w') as json_file:
-                json.dump({}, json_file)
-            
-            #print("ipfs_data.json file emptied successfully.")
-            
+            # Check if ipfs_data.json file exists before emptying it
+            ipfs_data_file_path = 'ipfs_data.json'
+            if Path(ipfs_data_file_path).exists():
+                # Open the ipfs_data.json file in write mode and write an empty JSON object
+                with open(ipfs_data_file_path, 'w') as json_file:
+                    json.dump({}, json_file)
+                print("ipfs_data.json file emptied successfully.")
+            else:
+                print("ipfs_data.json file does not exist.")
+
+            # Check if combined_data.json file exists before emptying it
+            combined_data_file_path = 'combined_data.json'
+            if Path(combined_data_file_path).exists():
+                # Empty the combined_data.json file
+                with open(combined_data_file_path, 'w') as combined_file:
+                    json.dump({}, combined_file)
+                print("combined_data.json file emptied successfully.")
+            else:
+                print("combined_data.json file does not exist.")
+
         except Exception as e:
-            print("Error emptying ipfs_data.json file:", e)
-                    
+            print("Error emptying ipfs_data.json and combined_data.json files:", e)
+  
     # Evaluating events emitted by the Ethereum contract
     def audit(self, event):
         
@@ -169,7 +183,7 @@ class Oracle:
         self.files_to_delete.append(downloaded_file_path2)
         
         # Initializing Decryption instance for decrypting files
-        decryption = Decryption(downloaded_file_path1, downloaded_file_path2, "private_key.pem")
+        decryption = Decryption(downloaded_file_path1, downloaded_file_path2, "private_key.pem", self.file_processor)
         decryption.process()
         
         # Processing decrypted files
@@ -187,6 +201,7 @@ class Oracle:
         self.files_to_delete.extend(xml_files)
         self.delete_files() 
         print(f"Evaluation completed for token {token_id}!")
+        self.empty_data_file()
 
     # Listening for events emitted by the Ethereum contract
     def listen_for_events(self):
@@ -221,5 +236,5 @@ if __name__ == "__main__":
     #print("Current address:", oracle.web3.eth.accounts[0])
     
     #fetching all IPFS links and listening for events (for audit purpose)
-    oracle.get_all_ipfs_links()
-    #oracle.listen_for_events()
+    #oracle.get_all_ipfs_links()
+    oracle.listen_for_events()
