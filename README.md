@@ -64,3 +64,4 @@ Employer side:
 3. _decryptor.py_ to decrypt the files
 4. _cv_parser_ to extract the values given the shortlisting criteria and calculate the total score for a given pair
 - The _private_key.pem_ is used in the _decryptor.py_ to decipher the plain text and the _public_key.pem_ is placed in the adverts
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
