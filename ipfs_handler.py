@@ -2,10 +2,6 @@ import json
 import requests
 from pathlib import Path
 from typing import Union
-#from decryptor import Decryption
-#from file_processor import FileProcessor
-#from cv_parser import CVProcessor
-#from CV_decryption import Decryption, FileProcessor
 
 #Exception for indicating no available gateways
 class NoGatewayAvailable(Exception):
@@ -137,35 +133,3 @@ class IpfsHandle:
             #handle exceptions when fetching pairs from JSON
             print("Error fetching pairs from JSON:", e)
             return []
-
-# Uncomment the main block if you want to test the functionality
-# if __name__ == "__main__":
-#     ipfs_handler = IpfsHandle()
-#     json_file_path = "ipfs_data.json"
-#     token_pairs = ipfs_handler.fetch_pairs_from_json(json_file_path)
-    
-#     for index, (part_one, part_two) in enumerate(token_pairs, start=1):
-#         downloaded_file_path1, gateway_address1 = ipfs_handler.get_file(part_one)
-#         downloaded_file_path2, gateway_address2 = ipfs_handler.get_file(part_two)
-        
-#         print(f"Pair {index}:")
-#         print(f"File downloaded at: {downloaded_file_path1}") 
-#         print(f"File downloaded at: {downloaded_file_path2}")
-        
-#         # Initialize FileProcessor instances for each pair
-#         file_processor1 = FileProcessor()
-        
-#         # Initialize Decryption instances for each pair
-#         decryption1 = Decryption(downloaded_file_path1, downloaded_file_path2, "private_key.pem", file_processor1)
-
-#         # Process decryption for the first pair of files
-#         decryption1.process()
-        
-#         # Call CVProcessor to extract CV details from decrypted XML files
-#         xml_files = [f"decrypted_file_{index}.xml"]
-#         cv_processor = CVProcessor(xml_files, json_file_path)
-#         cv_processor.extract_cv_details()
-
-    
-        
-
