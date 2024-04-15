@@ -63,7 +63,7 @@ class ContractWrapper:
             })
             receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
             print(f"Total score received for token with ID of {token_id} : {total_score}")
-            #print(f"Block number: {receipt['blockNumber']}")
+            print(f"Block number: {receipt['blockNumber']}")
             tx_hash = self.contract.functions.updateTotalScore(ipfs_link, second_part, total_score).transact({
                 'from': self.account_address,
             })

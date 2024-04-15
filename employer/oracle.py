@@ -38,7 +38,7 @@ class Oracle:
     def get_all_ipfs_links(self):
         try:
             # getting all IPFS links for a specific advert ID (111; 222; 333)
-            result = self.contract_wrapper.fetch_links(111)
+            result = self.contract_wrapper.fetch_links(101)
             if result:
                 
                 # Writing IPFS links to a JSON file
