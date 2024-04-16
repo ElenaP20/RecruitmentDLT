@@ -1,4 +1,4 @@
-Instruction on how to use:
+Instruction on how to use the following scripts:
 -
 The RSA key generation script
 -
