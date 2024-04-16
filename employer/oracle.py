@@ -35,10 +35,10 @@ class Oracle:
         self.files_to_delete = []
             
     # Fetching all IPFS links from the Ethereum contract
-    def get_all_ipfs_links(self):
+    def get_all_ipfs_links(self, advertId):
         try:
             # getting all IPFS links for a specific advert ID (111; 222; 333)
-            result = self.contract_wrapper.fetch_links(101)
+            result = self.contract_wrapper.fetch_links(advertId)
             if result:
                 
                 # Writing IPFS links to a JSON file
@@ -228,13 +228,15 @@ class Oracle:
 
 if __name__ == "__main__":
     #defining contract address and private key (key taken from Ganache)
-    contract_address = '0x79E5e3A5E9F35724dc2eBa917A2312C6b8050691'
-    private_key = '0xa5b94567be428698d8b6e622feed9c79e1770d6100179b707d810bbd8d87abf8'
-    
+    #contract_address = '0x79E5e3A5E9F35724dc2eBa917A2312C6b8050691'
+    #private_key = '0xa5b94567be428698d8b6e622feed9c79e1770d6100179b707d810bbd8d87abf8'
+    contract_address = input("Enter the address where Advert.sol is deployed: ")
+    private_key = input("Enter the private key of the owner: ")
     #initializing the oracle instance
     oracle = Oracle(contract_address, private_key)
     #print("Current address:", oracle.web3.eth.accounts[0])
-    
+    advertId = int(input("Enter the advert ID: "))
     #fetching all IPFS links and listening for events (for audit purpose)
-    oracle.get_all_ipfs_links()
-    #oracle.listen_for_events()
+    oracle.get_all_ipfs_links(advertId)
+
+    oracle.listen_for_events()
