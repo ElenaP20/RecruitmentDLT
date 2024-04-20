@@ -17,7 +17,7 @@ from ipfs_handler import IpfsHandle
 def handle_execution_time(event):
     # Extract the execution time from the event
     execution_time = event['args']['time']
-    print("Execution time:", execution_time, "seconds")
+    print("The execution time is", execution_time, "seconds")
     
 # Defining Oracle class for interacting with the Ethereum contract and handling events
 class Oracle:
