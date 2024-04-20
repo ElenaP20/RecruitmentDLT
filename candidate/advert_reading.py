@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 #adding the parent directory of the current directory to the Python path
-sys.path.append(str(Path(__file__).resolve().parent))
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from ipfs_handler import IpfsHandle, NoGatewayAvailable
 

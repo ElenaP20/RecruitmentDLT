@@ -25,7 +25,7 @@ class Oracle:
     def __init__(self, contract_address, private_key):
         
         # Initializing Web3 instance with a connection to the local Ethereum node (using Ganache RPC)
-        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7542'))
+        self.web3 = Web3(Web3.HTTPProvider('http://localhost:7545'))
         
         # Initializing ContractWrapper instance for interacting with the Ethereum contract
         self.contract_wrapper = ContractWrapper(contract_address, private_key)
