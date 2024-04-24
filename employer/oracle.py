@@ -198,9 +198,15 @@ class Oracle:
         except Exception as e:
             print(f"Error processing token {token_id}: {e}")
               
+        # Extend files_to_delete with xml_files
         self.files_to_delete.extend(xml_files)
+        
+        # Delete files after processing
         self.delete_files() 
+        
         print(f"Evaluation completed for token {token_id}!")
+        
+        # Empty data files
         self.empty_data_file()
 
     # Listening for events emitted by the Ethereum contract
@@ -228,15 +234,16 @@ class Oracle:
 
 if __name__ == "__main__":
     #defining contract address and private key (key taken from Ganache)
-    #contract_address = '0x79E5e3A5E9F35724dc2eBa917A2312C6b8050691'
-    #private_key = '0xa5b94567be428698d8b6e622feed9c79e1770d6100179b707d810bbd8d87abf8'
     contract_address = input("Enter the address where Advert.sol is deployed: ")
     private_key = input("Enter the private key of the owner: ")
+    
     #initializing the oracle instance
     oracle = Oracle(contract_address, private_key)
-    #print("Current address:", oracle.web3.eth.accounts[0])
+    
     advertId = int(input("Enter the advert ID: "))
+    
     #fetching all IPFS links and listening for events (for audit purpose)
-    oracle.get_all_ipfs_links(advertId)
+    #oracle.get_all_ipfs_links(advertId)
 
+    #once candidates are shortlisted comment out line 248 and uncomment: 
     oracle.listen_for_events()
