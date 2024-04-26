@@ -6,7 +6,7 @@ import sys
 from decryptor import Decryption
 from file_processor import FileProcessor
 from cv_parser import CVProcessor
-from pathlib import Path  # Added Path import
+from pathlib import Path  
 from contract_wrapper import ContractWrapper
 
 parent_dir = str(Path(__file__).resolve().parent.parent)
@@ -243,7 +243,7 @@ if __name__ == "__main__":
     advertId = int(input("Enter the advert ID: "))
     
     #fetching all IPFS links and listening for events (for audit purpose)
-    #oracle.get_all_ipfs_links(advertId)
+    oracle.get_all_ipfs_links(advertId)
 
     #once candidates are shortlisted comment out line 248 and uncomment: 
-    oracle.listen_for_events()
+    #oracle.listen_for_events()
